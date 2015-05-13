@@ -1,0 +1,3 @@
+wizin_simple_cms_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: WizinSimpleCmsBundle:Default:index }
