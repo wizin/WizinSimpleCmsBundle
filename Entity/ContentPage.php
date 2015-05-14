@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *   name="content_page",
  *   indexes={
- *     @ORM\Index(columns={"path_info"}),
+ *     @ORM\Index(columns={"path_info", "begin_at", "end_at"}),
  *   }
  * )
  * @ORM\Entity(repositoryClass="Wizin\Bundle\SimpleCmsBundle\Repository\ContentPageRepository")
