@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *   name="content_page",
  *   indexes={
- *     @ORM\Index(columns={"path_info", "begin_at", "end_at"}),
+ *     @ORM\Index(columns={"path_info", "active", "begin_at", "end_at"}),
  *   }
  * )
  * @ORM\Entity(repositoryClass="Wizin\Bundle\SimpleCmsBundle\Repository\ContentPageRepository")
@@ -79,6 +79,15 @@ class ContentPage
      * @Assert\NotNull()
      */
     private $endAt;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="active", type="boolean", options={"default":false})
+     * @Assert\NotNull()
+     * @Assert\Type(type="bool", message="The value {{ value }} is not a valid {{ type }}.")
+     */
+    private $active;
 
     /**
      * @var \DateTime
@@ -256,6 +265,29 @@ class ContentPage
     public function getEndAt()
     {
         return $this->endAt;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return ContentPage
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 
     /**
