@@ -1,0 +1,4 @@
+wizin_simple_cms_front_show:
+    path:     /show/
+    defaults: { _controller: WizinSimpleCmsBundle:Front:show }
+
