@@ -64,6 +64,38 @@ class ContentPage
      */
     private $template;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="begin_at", type="datetime")
+     * @Assert\NotNull()
+     */
+    private $beginAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="end_at", type="datetime")
+     * @Assert\NotNull()
+     */
+    private $endAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
+
 
     /**
      * Set id
