@@ -26,7 +26,7 @@ class ContentPage
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -35,7 +35,7 @@ class ContentPage
      * @Assert\NotNull()
      * @Assert\Type(type="string", message="The value {{ value }} is not a valid {{ type }}.")
      */
-    private $pathInfo;
+    protected $pathInfo;
 
     /**
      * @var string
@@ -44,7 +44,7 @@ class ContentPage
      * @Assert\NotNull()
      * @Assert\Type(type="string", message="The value {{ value }} is not a valid {{ type }}.")
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
@@ -53,7 +53,7 @@ class ContentPage
      * @Assert\NotNull()
      * @Assert\Type(type="string", message="The value {{ value }} is not a valid {{ type }}.")
      */
-    private $content;
+    protected $content;
 
     /**
      * @var string
@@ -62,7 +62,7 @@ class ContentPage
      * @Assert\NotNull()
      * @Assert\Type(type="string", message="The value {{ value }} is not a valid {{ type }}.")
      */
-    private $template;
+    protected $template;
 
     /**
      * @var \DateTime
@@ -70,7 +70,7 @@ class ContentPage
      * @ORM\Column(name="begin_at", type="datetime")
      * @Assert\NotNull()
      */
-    private $beginAt;
+    protected $beginAt;
 
     /**
      * @var \DateTime
@@ -78,7 +78,7 @@ class ContentPage
      * @ORM\Column(name="end_at", type="datetime")
      * @Assert\NotNull()
      */
-    private $endAt;
+    protected $endAt;
 
     /**
      * @var boolean
@@ -87,7 +87,7 @@ class ContentPage
      * @Assert\NotNull()
      * @Assert\Type(type="bool", message="The value {{ value }} is not a valid {{ type }}.")
      */
-    private $active;
+    protected $active;
 
     /**
      * @var \DateTime
@@ -95,7 +95,7 @@ class ContentPage
      * @ORM\Column(name="created_at", type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime
@@ -103,7 +103,7 @@ class ContentPage
      * @ORM\Column(name="updated_at", type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
-    private $updatedAt;
+    protected $updatedAt;
 
 
     /**
