@@ -14,12 +14,12 @@ class FrontController extends Controller
         $twig->addExtension(new \Twig_Extension_StringLoader());
         // TODO: retrieve $title from database
         $title = 'dummy';
-        // TODO: retrieve $templateDirectory from config
+        $template = $this->get('wizin_simple_cms.template');
+        $templateDir = $template->getTemplateDir();
         // TODO: retrieve $template from database
-        $templateDirectory = __DIR__ .'/../Resources/templates';
-        $template = 'default.html.twig';
+        $templateFile = 'default.html.twig';
         $body = $twig->render(
-            realpath($templateDirectory . '/' .$template),
+            realpath($templateDir . '/' .$templateFile),
             [
                 'title' => $title,
             ]
