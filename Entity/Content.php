@@ -7,17 +7,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * ContentPage
+ * Content
  *
  * @ORM\Table(
- *   name="content_page",
+ *   name="content",
  *   indexes={
  *     @ORM\Index(columns={"path_info", "active", "begin_at", "end_at"}),
  *   }
  * )
- * @ORM\Entity(repositoryClass="Wizin\Bundle\SimpleCmsBundle\Repository\ContentPageRepository")
+ * @ORM\Entity(repositoryClass="Wizin\Bundle\SimpleCmsBundle\Repository\ContentRepository")
  */
-class ContentPage
+class Content
 {
     /**
      * @var string
@@ -110,7 +110,7 @@ class ContentPage
      * Set id
      *
      * @param string $id
-     * @return ContentPage
+     * @return Content
      */
     public function setId($id)
     {
@@ -133,7 +133,7 @@ class ContentPage
      * Set pathInfo
      *
      * @param string $pathInfo
-     * @return ContentPage
+     * @return Content
      */
     public function setPathInfo($pathInfo)
     {
@@ -156,7 +156,7 @@ class ContentPage
      * Set title
      *
      * @param string $title
-     * @return ContentPage
+     * @return Content
      */
     public function setTitle($title)
     {
@@ -179,7 +179,7 @@ class ContentPage
      * Set content
      *
      * @param string $content
-     * @return ContentPage
+     * @return Content
      */
     public function setContent($content)
     {
@@ -202,7 +202,7 @@ class ContentPage
      * Set template
      *
      * @param string $template
-     * @return ContentPage
+     * @return Content
      */
     public function setTemplate($template)
     {
@@ -225,7 +225,7 @@ class ContentPage
      * Set beginAt
      *
      * @param \DateTime $beginAt
-     * @return ContentPage
+     * @return Content
      */
     public function setBeginAt($beginAt)
     {
@@ -248,7 +248,7 @@ class ContentPage
      * Set endAt
      *
      * @param \DateTime $endAt
-     * @return ContentPage
+     * @return Content
      */
     public function setEndAt($endAt)
     {
@@ -271,7 +271,7 @@ class ContentPage
      * Set active
      *
      * @param boolean $active
-     * @return ContentPage
+     * @return Content
      */
     public function setActive($active)
     {
@@ -294,7 +294,7 @@ class ContentPage
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return ContentPage
+     * @return Content
      */
     public function setCreatedAt($createdAt)
     {
@@ -317,7 +317,7 @@ class ContentPage
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return ContentPage
+     * @return Content
      */
     public function setUpdatedAt($updatedAt)
     {
