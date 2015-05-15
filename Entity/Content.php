@@ -49,11 +49,11 @@ class Content
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="text")
+     * @ORM\Column(name="parameters", type="text")
      * @Assert\NotNull()
      * @Assert\Type(type="string", message="The value {{ value }} is not a valid {{ type }}.")
      */
-    protected $content;
+    protected $parameters;
 
     /**
      * @var string
@@ -176,26 +176,26 @@ class Content
     }
 
     /**
-     * Set content
+     * Set parameters
      *
-     * @param string $content
+     * @param string $parameters
      * @return Content
      */
-    public function setContent($content)
+    public function setParameters($parameters)
     {
-        $this->content = $content;
+        $this->parameters = $parameters;
 
         return $this;
     }
 
     /**
-     * Get content
+     * Get parameters
      *
      * @return string 
      */
-    public function getContent()
+    public function getParameters()
     {
-        return $this->content;
+        return $this->parameters;
     }
 
     /**
