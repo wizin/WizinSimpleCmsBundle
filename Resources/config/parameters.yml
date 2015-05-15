@@ -1,4 +1,5 @@
 parameters:
+    wizin_simple_cms.template.class: "Wizin\Bundle\SimpleCmsBundle\Service\Template"
     wizin_simple_cms.left_delimiter: "<{"
     wizin_simple_cms.right_delimiter: "}>"
 #    wizin_simple_cms.template_directory: "/path/to/template/directory"

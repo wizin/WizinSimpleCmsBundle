@@ -1,3 +1,6 @@
 services:
-#    wizin_simple_cms.example:
-#        class: %wizin_simple_cms.example.class%
+    wizin_simple_cms.template:
+        class: %wizin_simple_cms.template.class%
+        arguments:
+            container: "@service_container"
+
