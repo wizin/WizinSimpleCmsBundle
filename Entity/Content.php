@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *   name="content",
  *   indexes={
- *     @ORM\Index(columns={"path_info", "active", "begin_at", "end_at"}),
+ *     @ORM\Index(columns={"path_info", "active"}),
  *   }
  * )
  * @ORM\Entity(repositoryClass="Wizin\Bundle\SimpleCmsBundle\Repository\ContentRepository")
@@ -63,22 +63,6 @@ class Content
      * @Assert\Type(type="string", message="The value {{ value }} is not a valid {{ type }}.")
      */
     protected $template;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="begin_at", type="datetime")
-     * @Assert\NotNull()
-     */
-    protected $beginAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="end_at", type="datetime")
-     * @Assert\NotNull()
-     */
-    protected $endAt;
 
     /**
      * @var boolean
@@ -219,52 +203,6 @@ class Content
     public function getTemplate()
     {
         return $this->template;
-    }
-
-    /**
-     * Set beginAt
-     *
-     * @param \DateTime $beginAt
-     * @return Content
-     */
-    public function setBeginAt($beginAt)
-    {
-        $this->beginAt = $beginAt;
-
-        return $this;
-    }
-
-    /**
-     * Get beginAt
-     *
-     * @return \DateTime 
-     */
-    public function getBeginAt()
-    {
-        return $this->beginAt;
-    }
-
-    /**
-     * Set endAt
-     *
-     * @param \DateTime $endAt
-     * @return Content
-     */
-    public function setEndAt($endAt)
-    {
-        $this->endAt = $endAt;
-
-        return $this;
-    }
-
-    /**
-     * Get endAt
-     *
-     * @return \DateTime 
-     */
-    public function getEndAt()
-    {
-        return $this->endAt;
     }
 
     /**
