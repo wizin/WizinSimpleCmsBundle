@@ -4,9 +4,17 @@ namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+/**
+ * Class FrontController
+ * @package Wizin\Bundle\SimpleCmsBundle\Controller
+ */
 class FrontController extends Controller
 {
+    /**
+     * @Route("/show")
+     */
     public function showAction()
     {
         /** @var \Wizin\Bundle\SimpleCmsBundle\Service\Template $template */
