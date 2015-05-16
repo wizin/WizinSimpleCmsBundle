@@ -9,32 +9,32 @@ class FrontController extends Controller
 {
     public function showAction()
     {
-        /** @var \Twig_Environment $twig */
-        $twig = $this->get('twig');
-        $twig->addExtension(new \Twig_Extension_StringLoader());
-        // TODO: retrieve $title from database
-        $title = 'dummy';
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Service\Template $template */
         $template = $this->get('wizin_simple_cms.template');
-        $templateDir = $template->getTemplateDir();
         // TODO: retrieve $template from database
         $templateFile = 'default.html.twig';
-        $body = $twig->render(
-            realpath($templateDir . '/' .$templateFile),
+        // TODO: retrieve $title from database
+        $title = 'dummy';
+        // TODO: retrieve $parameters from database
+        $parameters = [
+            'subTitle' => '<h1>Test</h1>',
+        ];
+        // generate body string
+        $body = $this->renderView(
+            realpath($template->getTemplateDir() . '/' .$templateFile),
             [
                 'title' => $title,
             ]
         );
-        // TODO: retrieve $content from database
-        $content = [
-            'subTitle' => '<h1>Test</h1>',
-        ];
-        foreach ($content as $key => $value) {
+        foreach ($parameters as $key => $value) {
             $body = str_replace(
-                $this->container->getParameter('wizin_simple_cms.left_delimiter') . $key . $this->container->getParameter('wizin_simple_cms.right_delimiter'),
+                $this->container->getParameter('wizin_simple_cms.left_delimiter')
+                    . $key . $this->container->getParameter('wizin_simple_cms.right_delimiter'),
                 $value,
                 $body
             );
         }
+        // create response
         $response = new Response();
         $response->setContent($body);
 
