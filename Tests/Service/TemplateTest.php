@@ -26,20 +26,25 @@ class TemplateTest extends ServiceTestCase
         $this->assertSame($expected, $templateFiles);
     }
 
+    /**
+     * data provider for $this->getTemplateFiles()
+     *
+     * @return array
+     */
     public function getTemplateFilesProvider()
     {
         return [
             [
                 null,
                 [
-                    dirname(dirname(__DIR__)) . '/Resources/templates/default.html.twig'
+                    'default.html.twig'
                 ]
             ],
             [
-                dirname(__DIR__) . '/Resources/templates',
+                dirname(__DIR__) . '/Resources/templates/',
                 [
-                    dirname(__DIR__) . '/Resources/templates/test.html.twig',
-                    dirname(__DIR__) . '/Resources/templates/test.txt.twig'
+                    'dir/test.html.twig',
+                    'test.html.twig',
                 ]
             ]
         ];

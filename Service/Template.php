@@ -54,7 +54,7 @@ class Template
     }
 
     /**
-     * @return string[]
+     * @return string[] template file path without template directory path
      */
     public function getTemplateFiles()
     {
@@ -70,7 +70,11 @@ class Template
         $templateFiles = [];
         foreach ($finder as $file) {
             /** @var \SplFileInfo $file */
-            $templateFiles[] = $file->getPathname();
+            $templateFile = str_replace($this->templateDir, '', $file->getPathname());
+            if (substr($templateFile, 0, 1) === '/') {
+                $templateFile = substr($templateFile, 1);
+            }
+            $templateFiles[] = $templateFile;
         }
 
         return $templateFiles;
