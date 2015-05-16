@@ -11,32 +11,18 @@ class FrontController extends Controller
     {
         /** @var \Wizin\Bundle\SimpleCmsBundle\Service\Template $template */
         $template = $this->get('wizin_simple_cms.template');
-        // TODO: retrieve $template from database
-        $templateFile = 'default.html.twig';
-        // TODO: retrieve $title from database
-        $title = 'dummy';
-        // TODO: retrieve $parameters from database
-        $parameters = [
-            'subTitle' => '<h1>Test</h1>',
-        ];
-        // generate body string
-        $body = $this->renderView(
-            realpath($template->getTemplateDir() . '/' .$templateFile),
-            [
-                'title' => $title,
-            ]
-        );
-        foreach ($parameters as $key => $value) {
-            $body = str_replace(
-                $this->container->getParameter('wizin_simple_cms.left_delimiter')
-                    . $key . $this->container->getParameter('wizin_simple_cms.right_delimiter'),
-                $value,
-                $body
-            );
-        }
+        $pathInfo = $this->getRequest()->getPathInfo();
+        // TODO: retrieve Content instance by $pathInfo
+        $content = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
+            ->setPathInfo($pathInfo)
+            ->setTitle('dummy')
+            ->setParameters(['subTitle' => '<h1>Test</h1>'])
+            ->setTemplate('default.html.twig')
+        ;
         // create response
         $response = new Response();
-        $response->setContent($body);
+        $responseContent = $template->generateResponseContent($content);
+        $response->setContent($responseContent);
 
         return $response;
     }

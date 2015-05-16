@@ -6,6 +6,7 @@ namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
+use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
 /**
  * Class Template
@@ -13,6 +14,11 @@ use Symfony\Component\Finder\Finder;
  */
 class Template
 {
+    /**
+     * regex index for placeholder
+     */
+    const PLACEHOLDER_INDEX = 3;
+
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -78,5 +84,110 @@ class Template
         }
 
         return $templateFiles;
+    }
+
+    /**
+     * @param $templateFile
+     * @return string path to template file
+     */
+    public function getTemplateFilePath($templateFile)
+    {
+        return realpath($this->templateDir .'/' .$templateFile);
+    }
+
+    /**
+     * @param $templateFile
+     * @return bool
+     */
+    public function isExists($templateFile)
+    {
+        return file_exists($this->getTemplateFilePath($templateFile));
+    }
+
+    /**
+     * @param $templateFile
+     * @return null|string template source
+     */
+    public function getTemplateSource($templateFile)
+    {
+        if ($this->isExists($templateFile)) {
+            return file_get_contents($this->getTemplateFilePath($templateFile));
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @return string regex pattern for placeholder
+     */
+    public function getPlaceholderRegex()
+    {
+        return '/'
+            . '(' . preg_quote($this->container->getParameter('wizin_simple_cms.left_delimiter'), '/') . ')'
+            . '(\s*)(\S+)(\s*)'
+            . '(' . preg_quote($this->container->getParameter('wizin_simple_cms.right_delimiter'), '/') . ')'
+            . '/';
+    }
+
+    /**
+     * @param $templateFile
+     * @return string[] placeholders
+     */
+    public function getPlaceholders($templateFile)
+    {
+        $pattern = $this->getPlaceholderRegex();
+        preg_match_all($pattern, $this->getTemplateSource($templateFile), $matches);
+        if (isset($matches[static::PLACEHOLDER_INDEX]) && is_array($matches[static::PLACEHOLDER_INDEX])) {
+            $placeholders = $matches[static::PLACEHOLDER_INDEX];
+        } else {
+            $placeholders = [];
+        }
+
+        return array_unique($placeholders);
+    }
+
+    /**
+     * @param string $source source before replace
+     * @param array $parameters
+     * @return string $source source after replace
+     */
+    public function replaceSource($source, array $parameters)
+    {
+        $pattern = $this->getPlaceholderRegex();
+        preg_match_all($pattern, $source, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $key = $match[static::PLACEHOLDER_INDEX];
+            if (isset($parameters[$key])) {
+                $value = $parameters[$key];
+            } else {
+                $value = '';
+            }
+            $source = str_replace(
+                $match[0],
+                $value,
+                $source
+            );
+        }
+
+        return $source;
+    }
+
+    /**
+     * @param Content $content
+     * @return string $responseContent content string for response
+     */
+    public function generateResponseContent(Content $content)
+    {
+        $twig = $this->container->get('twig');
+        $source = $twig->render(
+            $this->getTemplateFilePath($content->getTemplate()),
+            [
+                'title' => $content->getTitle(),
+            ]
+        );
+        $parameters = $content->getParameters();
+        $responseContent = $this->replaceSource($source, $parameters);
+
+        return $responseContent;
     }
 }
