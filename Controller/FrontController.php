@@ -24,7 +24,7 @@ class FrontController extends Controller
         $content = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
             ->setPathInfo($pathInfo)
             ->setTitle('dummy')
-            ->setParameters(['subTitle' => '<h1>Test</h1>'])
+            ->setParameters(['body' => '<h1>Test</h1>'])
             ->setTemplate('default.html.twig')
         ;
         // create response
