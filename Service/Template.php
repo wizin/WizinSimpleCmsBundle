@@ -106,31 +106,6 @@ class Template
 
     /**
      * @param $templateFile
-     * @return null|string template source
-     */
-    public function getTemplateSource($templateFile)
-    {
-        if ($this->isExists($templateFile)) {
-            return file_get_contents($this->getTemplateFilePath($templateFile));
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @return string regex pattern for placeholder
-     */
-    public function getPlaceholderRegex()
-    {
-        return '/'
-            . '(' . preg_quote($this->container->getParameter('wizin_simple_cms.left_delimiter'), '/') . ')'
-            . '(\s*)(\S+)(\s*)'
-            . '(' . preg_quote($this->container->getParameter('wizin_simple_cms.right_delimiter'), '/') . ')'
-            . '/';
-    }
-
-    /**
-     * @param $templateFile
      * @return string[] placeholders
      */
     public function getPlaceholders($templateFile)
@@ -144,32 +119,6 @@ class Template
         }
 
         return array_unique($placeholders);
-    }
-
-    /**
-     * @param string $source source before replace
-     * @param array $parameters
-     * @return string $source source after replace
-     */
-    public function replaceSource($source, array $parameters)
-    {
-        $pattern = $this->getPlaceholderRegex();
-        preg_match_all($pattern, $source, $matches, PREG_SET_ORDER);
-        foreach ($matches as $match) {
-            $key = $match[static::PLACEHOLDER_INDEX];
-            if (isset($parameters[$key])) {
-                $value = $parameters[$key];
-            } else {
-                $value = '';
-            }
-            $source = str_replace(
-                $match[0],
-                $value,
-                $source
-            );
-        }
-
-        return $source;
     }
 
     /**
@@ -189,5 +138,56 @@ class Template
         $responseContent = $this->replaceSource($source, $parameters);
 
         return $responseContent;
+    }
+
+    /**
+     * @return string regex pattern for placeholder
+     */
+    protected function getPlaceholderRegex()
+    {
+        return '/'
+        . '(' . preg_quote($this->container->getParameter('wizin_simple_cms.left_delimiter'), '/') . ')'
+        . '(\s*)(\S+)(\s*)'
+        . '(' . preg_quote($this->container->getParameter('wizin_simple_cms.right_delimiter'), '/') . ')'
+        . '/';
+    }
+
+    /**
+     * @param $templateFile
+     * @return null|string template source
+     */
+    protected function getTemplateSource($templateFile)
+    {
+        if ($this->isExists($templateFile)) {
+            return file_get_contents($this->getTemplateFilePath($templateFile));
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $source source before replace
+     * @param array $parameters
+     * @return string $source source after replace
+     */
+    protected function replaceSource($source, array $parameters)
+    {
+        $pattern = $this->getPlaceholderRegex();
+        preg_match_all($pattern, $source, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $key = $match[static::PLACEHOLDER_INDEX];
+            if (isset($parameters[$key])) {
+                $value = $parameters[$key];
+            } else {
+                $value = '';
+            }
+            $source = str_replace(
+                $match[0],
+                $value,
+                $source
+            );
+        }
+
+        return $source;
     }
 }
