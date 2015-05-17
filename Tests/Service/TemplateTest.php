@@ -118,7 +118,7 @@ class TemplateTest extends ServiceTestCase
             ->setPathInfo('/test')
             ->setTitle($title)
             ->setParameters(['body' => $body])
-            ->setTemplate('default.html.twig')
+            ->setTemplateFile('default.html.twig')
         ;
         $data[] = [$testContent, ['title' => $title, 'body' => $body]];
         $title = 'dummy page';
@@ -127,7 +127,7 @@ class TemplateTest extends ServiceTestCase
             ->setPathInfo('/dummy')
             ->setTitle($title)
             ->setParameters(['body' => $body])
-            ->setTemplate('default.html.twig')
+            ->setTemplateFile('default.html.twig')
         ;
         $data[] = [$dummyContent, ['title' => $title, 'body' => $body]];
 

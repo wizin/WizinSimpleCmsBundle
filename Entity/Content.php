@@ -61,11 +61,11 @@ class Content
     /**
      * @var string
      *
-     * @ORM\Column(name="template", type="string", length=255)
+     * @ORM\Column(name="template_file", type="string", length=255)
      * @Assert\NotNull()
      * @Assert\Type(type="string", message="The value {{ value }} is not a valid {{ type }}.")
      */
-    protected $template;
+    protected $templateFile;
 
     /**
      * @var boolean
@@ -186,26 +186,26 @@ class Content
     }
 
     /**
-     * Set template
+     * Set templateFile
      *
-     * @param string $template
+     * @param string $templateFile
      * @return Content
      */
-    public function setTemplate($template)
+    public function setTemplateFile($templateFile)
     {
-        $this->template = $template;
+        $this->templateFile = $templateFile;
 
         return $this;
     }
 
     /**
-     * Get template
+     * Get templateFile
      *
      * @return string 
      */
-    public function getTemplate()
+    public function getTemplateFile()
     {
-        return $this->template;
+        return $this->templateFile;
     }
 
     /**

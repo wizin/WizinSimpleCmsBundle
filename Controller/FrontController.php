@@ -25,7 +25,7 @@ class FrontController extends Controller
             ->setPathInfo($pathInfo)
             ->setTitle('dummy')
             ->setParameters(['body' => '<h1>Test</h1>'])
-            ->setTemplate('default.html.twig')
+            ->setTemplateFile('default.html.twig')
         ;
         // create response
         $response = new Response();

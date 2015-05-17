@@ -129,7 +129,7 @@ class Template
     {
         $twig = $this->container->get('twig');
         $source = $twig->render(
-            $this->getTemplateFilePath($content->getTemplate()),
+            $this->getTemplateFilePath($content->getTemplateFile()),
             [
                 'title' => $content->getTitle(),
             ]
