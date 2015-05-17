@@ -12,15 +12,47 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class AdminController extends Controller
 {
+    /**
+     * @Route("/", name="wizin_simple_cms_admin_index")
+     * @Template()
+     */
+    public function indexAction()
+    {
+        return $this->forward('WizinSimpleCmsBundle:Admin:list');
+    }
 
     /**
-     * @Route("/")
+     * @Route("/list", name="wizin_simple_cms_admin_list")
      * @Template()
      */
     public function listAction()
     {
-        return array(
-            // ...
-        );
+        return [];
+    }
+
+    /**
+     * @Route(
+     *   "/add/{templateFile}",
+     *   name="wizin_simple_cms_admin_add",
+     *   requirements={"templateFile"=".*"},
+     *   defaults={"templateFile"=""}
+     * )
+     * @Template()
+     */
+    public function addAction($templateFile)
+    {
+        if ($templateFile === '') {
+            return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
+        }
+        return [];
+    }
+
+    /**
+     * @Route("/selectTemplateFile", name="wizin_simple_cms_admin_select_template_file")
+     * @Template("WizinSimpleCmsBundle:Admin:select_template_file.html.twig")
+     */
+    public function selectTemplateFileAction()
+    {
+        return [];
     }
 }
