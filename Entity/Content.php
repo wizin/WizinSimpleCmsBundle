@@ -13,6 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *   name="content",
  *   indexes={
  *     @ORM\Index(columns={"path_info", "active"}),
+ *   },
+ *   uniqueConstraints={
+ *     @ORM\UniqueConstraint(columns={"path_info"})
  *   }
  * )
  * @ORM\Entity(repositoryClass="Wizin\Bundle\SimpleCmsBundle\Repository\ContentRepository")
