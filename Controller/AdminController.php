@@ -53,7 +53,7 @@ class AdminController extends Controller
      */
     public function selectTemplateFileAction()
     {
-        return [];
+        return ['templateFiles' => $this->getTemplateService()->getTemplateFiles()];
     }
 
     /**
