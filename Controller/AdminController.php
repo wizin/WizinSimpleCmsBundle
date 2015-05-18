@@ -55,4 +55,12 @@ class AdminController extends Controller
     {
         return [];
     }
+
+    /**
+     * @return \Wizin\Bundle\SimpleCmsBundle\Service\Template
+     */
+    protected function getTemplateService()
+    {
+        return $this->get('wizin_simple_cms.template');
+    }
 }

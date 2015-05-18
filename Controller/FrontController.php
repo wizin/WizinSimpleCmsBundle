@@ -17,8 +17,7 @@ class FrontController extends Controller
      */
     public function showAction()
     {
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Service\Template $template */
-        $template = $this->get('wizin_simple_cms.template');
+        $template = $this->getTemplateService();
         $pathInfo = $this->getRequest()->getPathInfo();
         // TODO: retrieve Content instance by $pathInfo
         $content = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
@@ -33,5 +32,13 @@ class FrontController extends Controller
         $response->setContent($responseContent);
 
         return $response;
+    }
+
+    /**
+     * @return \Wizin\Bundle\SimpleCmsBundle\Service\Template
+     */
+    protected function getTemplateService()
+    {
+        return $this->get('wizin_simple_cms.template');
     }
 }
