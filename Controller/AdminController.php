@@ -5,6 +5,8 @@ namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
+use Wizin\Bundle\SimpleCmsBundle\Form\ContentType;
 
 /**
  * Class AdminController
@@ -44,7 +46,10 @@ class AdminController extends Controller
         if ($templateFile === '') {
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
-        return [];
+        $content = new Content();
+        $form = $this->createForm(new ContentType(), $content);
+
+        return ['form' => $form->createView()];
     }
 
     /**
