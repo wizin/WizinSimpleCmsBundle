@@ -165,12 +165,12 @@ class Content
     /**
      * Set parameters
      *
-     * @param string $parameters
+     * @param array $parameters
      * @return Content
      */
-    public function setParameters($parameters)
+    public function setParameters(array $parameters)
     {
-        $this->parameters = $parameters;
+        $this->parameters = json_encode($parameters);
 
         return $this;
     }
@@ -178,11 +178,11 @@ class Content
     /**
      * Get parameters
      *
-     * @return string 
+     * @return array
      */
     public function getParameters()
     {
-        return $this->parameters;
+        return json_decode($this->parameters, true);
     }
 
     /**
