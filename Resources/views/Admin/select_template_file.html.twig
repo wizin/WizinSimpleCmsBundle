@@ -3,6 +3,8 @@
 {% block title %}WizinSimpleCmsBundle:Admin{% endblock %}
 
 {% block body %}
+    <a href="{{ path('wizin_simple_cms_admin_index') }}">Back</a>
+    <hr/>
     <h1>Select template file</h1>
     <form id="select-template-file" action="{{ path('wizin_simple_cms_admin_add') }}" method="get">
         <select id="template-file">
