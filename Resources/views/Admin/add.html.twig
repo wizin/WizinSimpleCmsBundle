@@ -3,11 +3,39 @@
 {% block title %}WizinSimpleCmsBundle:Admin{% endblock %}
 
 {% block body %}
+    <a href="{{ path('wizin_simple_cms_admin_select_template_file') }}">Back</a>
+    <hr/>
     <h1>Create new content</h1>
     {{ form_start(form) }}
-    {#- pathInfo -#}
-    {{ form_label(form.pathInfo) }}
-    {{ form_errors(form.pathInfo) }}
-    {{ form_widget(form.pathInfo) }}
+    <div>
+        {#- pathInfo -#}
+        {{ form_label (form.pathInfo) }}
+        {{ form_errors(form.pathInfo) }}
+        {{ form_widget(form.pathInfo) }}
+    </div>
+    <div>
+        {#- title -#}
+        {{ form_label (form.title) }}
+        {{ form_errors(form.title) }}
+        {{ form_widget(form.title) }}
+    </div>
+    <div>
+        {#- templateFile -#}
+        {{ form_label (form.templateFile) }}
+        {{ form_errors(form.templateFile) }}
+        {{ form_widget(form.templateFile) }}
+    </div>
+    <div>
+        {#- active -#}
+        {{ form_label (form.active) }}
+        {{ form_errors(form.active) }}
+        {{ form_widget(form.active) }}
+    </div>
+    <hr/>
+    {#- parameters -#}
+    {{ form_label (form.parameters) }}
+    {{ form_errors(form.parameters) }}
+    {{ form_widget(form.parameters) }}
+    <input type="submit" />
     {{ form_end(form) }}
 {% endblock %}

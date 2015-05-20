@@ -47,7 +47,19 @@ class AdminController extends Controller
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
         $content = new Content();
+        $parameters = [];
+        foreach ($this->getTemplateService()->getPlaceholders($templateFile) as $placeholder) {
+            $parameters[$placeholder] = null;
+        }
+        $content->setParameters($parameters);
+        $content->setTemplateFile($templateFile);
         $form = $this->createForm(new ContentType(), $content);
+        if ($this->getRequest()->isMethod('POST')) {
+            $form->handleRequest($this->getRequest());
+            if ($form->isValid()) {
+                // TODO: persist entity
+            }
+        }
 
         return ['form' => $form->createView()];
     }
