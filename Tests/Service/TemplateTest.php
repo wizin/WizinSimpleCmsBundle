@@ -138,6 +138,53 @@ class TemplateTest extends ServiceTestCase
     }
 
     /**
+     * @test
+     * @dataProvider removeCacheProvider
+     */
+    public function removeCache(Content $content, $expected)
+    {
+        $service = $this->getService();
+        $filesystem = new Filesystem();
+        $cache = static::$kernel->getCacheDir() . '/' .  $service::CACHE_DIR_NAME . '/' .$content->getId() .'.html.twig';
+        $filesystem->dumpFile($cache, '');
+        $this->assertTrue($filesystem->exists($cache));
+        $service->removeCache($content);
+        $this->assertFalse($filesystem->exists($cache));
+    }
+
+    /**
+     * data provider for $this->removeCache()
+     *
+     * @return array
+     */
+    public function removeCacheProvider()
+    {
+        $data = [];
+        $title = 'test page';
+        $body = '<h1>Test</h1>';
+        $testContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
+            ->setId('00000000-0000-0000-0000-000000000001')
+            ->setPathInfo('/test')
+            ->setTitle($title)
+            ->setParameters(['body' => $body])
+            ->setTemplateFile('default.html.twig')
+        ;
+        $data[] = [$testContent, ['title' => $title, 'body' => $body]];
+        $title = 'dummy page';
+        $body = '<h1>Dummy</h1>';
+        $dummyContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
+            ->setId('00000000-0000-0000-0000-000000000002')
+            ->setPathInfo('/dummy')
+            ->setTitle($title)
+            ->setParameters(['body' => $body])
+            ->setTemplateFile('default.html.twig')
+        ;
+        $data[] = [$dummyContent, ['title' => $title, 'body' => $body]];
+
+        return $data;
+    }
+
+    /**
      * @return null
      */
     public function tearDown()

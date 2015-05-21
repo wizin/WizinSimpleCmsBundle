@@ -154,6 +154,16 @@ class Template
     }
 
     /**
+     * @param Content $content
+     */
+    public function removeCache(Content $content)
+    {
+        $filesystem = new Filesystem();
+        $cache = $this->getCachePath($content);
+        $filesystem->remove($cache);
+    }
+
+    /**
      * @return string regex pattern for placeholder
      */
     protected function getPlaceholderRegex()
