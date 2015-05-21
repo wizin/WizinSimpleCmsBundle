@@ -12,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class ContentRepository extends EntityRepository
 {
+    /**
+     * @param string $pathInfo
+     * @return null|\Wizin\Bundle\SimpleCmsBundle\Entity\Content
+     */
+    public function retrieveEnableContent($pathInfo)
+    {
+        $criteria = [
+            'pathInfo' => $pathInfo,
+            'active' => true,
+        ];
+
+        return $this->findOneBy($criteria);
+    }
 }
