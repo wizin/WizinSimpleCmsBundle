@@ -135,6 +135,9 @@ class Template
      */
     public function generateResponseContent(Content $content)
     {
+        if ($this->container->get('kernel')->isDebug()) {
+            $this->removeCache($content);
+        }
         $filesystem = new Filesystem();
         $cachePath = $this->getCachePath($content);
         if ($filesystem->exists($cachePath) === false) {
