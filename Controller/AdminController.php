@@ -155,6 +155,8 @@ class AdminController extends Controller
             // persist entity
             $this->getEntityManager()->persist($content);
             $this->getEntityManager()->flush();
+            // remove old cache
+            $this->getTemplateService()->removeCache($content);
             $result = true;
         }
 
