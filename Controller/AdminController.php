@@ -70,6 +70,31 @@ class AdminController extends Controller
     }
 
     /**
+     * @Route(
+     *   "/edit/{id}",
+     *   name="wizin_simple_cms_admin_edit",
+     * )
+     * @Template()
+     */
+    public function editAction($id)
+    {
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
+        $content = $this->getContentRepository()->find($id);
+        if (is_null($content)) {
+            // invalid url
+            throw new NotFoundHttpException();
+        }
+        $form = $this->createContentForm($content, $content->getTemplateFile());
+        if ($this->getRequest()->isMethod('POST')) {
+            if ($this->saveContent($form, $content)) {
+                return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
+            }
+        }
+
+        return ['form' => $form->createView()];
+    }
+
+    /**
      * @Route("/selectTemplateFile", name="wizin_simple_cms_admin_select_template_file")
      * @Template("WizinSimpleCmsBundle:Admin:select_template_file.html.twig")
      */

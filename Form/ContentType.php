@@ -15,6 +15,7 @@ class ContentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('id', 'hidden');
         $builder->add('pathInfo');
         $builder->add('title');
         $builder->add('parameters', 'collection', ['type' => 'textarea']);

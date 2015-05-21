@@ -37,6 +37,8 @@
                 <td>
                     <a class="wizin-simple-cms__link" href="{{ baseUrl }}{{ content.pathInfo }}">view</a>
                     &nbsp; / &nbsp;
+                    <a href="{{ path('wizin_simple_cms_admin_edit', {'id': content.id}) }}">edit</a>
+                    &nbsp; / &nbsp;
                     <a class="wizin-simple-cms__link" href="{{ path('wizin_simple_cms_admin_preview', {'id': content.id}) }}">preview</a>
                 </td>
             </tr>
