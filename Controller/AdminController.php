@@ -51,7 +51,11 @@ class AdminController extends Controller
         if ($this->getRequest()->isMethod('POST')) {
             $form->handleRequest($this->getRequest());
             if ($form->isValid()) {
-                // TODO: persist entity
+                // persist entity
+                $this->getDoctrine()->getManager()->persist($content);
+                $this->getDoctrine()->getManager()->flush();
+
+                return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
 
