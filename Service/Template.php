@@ -6,6 +6,7 @@ namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
 /**
@@ -18,6 +19,11 @@ class Template
      * regex index for placeholder
      */
     const PLACEHOLDER_INDEX = 3;
+
+    /**
+     * cache directory name
+     */
+    const CACHE_DIR_NAME = 'cms';
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -101,7 +107,9 @@ class Template
      */
     public function isExists($templateFile)
     {
-        return file_exists($this->getTemplateFilePath($templateFile));
+        $filesystem = new Filesystem();
+
+        return $filesystem->exists($this->getTemplateFilePath($templateFile));
     }
 
     /**
@@ -127,15 +135,20 @@ class Template
      */
     public function generateResponseContent(Content $content)
     {
+        $filesystem = new Filesystem();
+        $cachePath = $this->getCachePath($content);
+        if ($filesystem->exists($cachePath) === false) {
+            $source = $this->getTemplateSource($content->getTemplateFile());
+            $source = $this->replaceSource($source, $content->getParameters());
+            $filesystem->dumpFile($cachePath, $source);
+        }
         $twig = $this->container->get('twig');
-        $source = $twig->render(
-            $this->getTemplateFilePath($content->getTemplateFile()),
+        $responseContent = $twig->render(
+            $cachePath,
             [
                 'title' => $content->getTitle(),
             ]
         );
-        $parameters = $content->getParameters();
-        $responseContent = $this->replaceSource($source, $parameters);
 
         return $responseContent;
     }
@@ -189,5 +202,15 @@ class Template
         }
 
         return $source;
+    }
+
+    /**
+     * @param Content $content
+     * @return string cache file path
+     */
+    protected function getCachePath(Content $content)
+    {
+        return $this->container->get('kernel')->getCacheDir() . '/'
+        . static::CACHE_DIR_NAME . '/' .$content->getId() . '.html.twig';
     }
 }

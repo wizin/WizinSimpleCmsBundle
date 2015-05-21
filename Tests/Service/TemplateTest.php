@@ -2,6 +2,7 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Tests\Service;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Filesystem\Filesystem;
 use Wizin\Bundle\BaseBundle\TestCase\ServiceTestCase;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
@@ -115,6 +116,7 @@ class TemplateTest extends ServiceTestCase
         $title = 'test page';
         $body = '<h1>Test</h1>';
         $testContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
+            ->setId('00000000-0000-0000-0000-000000000001')
             ->setPathInfo('/test')
             ->setTitle($title)
             ->setParameters(['body' => $body])
@@ -124,6 +126,7 @@ class TemplateTest extends ServiceTestCase
         $title = 'dummy page';
         $body = '<h1>Dummy</h1>';
         $dummyContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
+            ->setId('00000000-0000-0000-0000-000000000002')
             ->setPathInfo('/dummy')
             ->setTitle($title)
             ->setParameters(['body' => $body])
@@ -132,6 +135,18 @@ class TemplateTest extends ServiceTestCase
         $data[] = [$dummyContent, ['title' => $title, 'body' => $body]];
 
         return $data;
+    }
+
+    /**
+     * @return null
+     */
+    public function tearDown()
+    {
+        $service = $this->getService();
+        $filesystem = new Filesystem();
+        $filesystem->remove(static::$kernel->getCacheDir() . '/' .  $service::CACHE_DIR_NAME);
+
+        parent::tearDown();
     }
 
     /**
