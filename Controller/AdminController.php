@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
@@ -152,12 +153,17 @@ class AdminController extends Controller
         $result = false;
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
-            // persist entity
-            $this->getEntityManager()->persist($content);
-            $this->getEntityManager()->flush();
-            // remove old cache
-            $this->getTemplateService()->removeCache($content);
-            $result = true;
+            if ($this->getContentRepository()->isDuplicated($content) === false) {
+                // persist entity
+                $this->getEntityManager()->persist($content);
+                $this->getEntityManager()->flush();
+                // remove old cache
+                $this->getTemplateService()->removeCache($content);
+                $result = true;
+            } else {
+                $form->addError(new FormError(
+                        $this->container->getParameter('wizin_simple_cms.message.error.duplicate')));
+            }
         }
 
         return $result;

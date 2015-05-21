@@ -3,6 +3,7 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
 /**
  * ContentRepository
@@ -24,5 +25,29 @@ class ContentRepository extends EntityRepository
         ];
 
         return $this->findOneBy($criteria);
+    }
+
+    /**
+     * @param Content $content
+     * @return bool
+     */
+    public function isDuplicated(Content $content)
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder
+            ->select('content')
+            ->from('\Wizin\Bundle\SimpleCmsBundle\Entity\Content', 'content')
+            ->where('content.id != :id')
+            ->andWhere('content.pathInfo = :pathInfo')
+            ->setParameters(
+                [
+                    'id' => $content->getId(),
+                    'pathInfo' => $content->getPathInfo(),
+                ]
+            )
+        ;
+        $entity = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return (is_null($entity) === false);
     }
 }
