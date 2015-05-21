@@ -13,9 +13,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class FrontController extends Controller
 {
     /**
-     * @Route("/show")
+     * @Route("/{path}", defaults={"path" = null})
      */
-    public function showAction()
+    public function showAction($path = null)
     {
         $template = $this->getTemplateService();
         $pathInfo = $this->getRequest()->getPathInfo();
