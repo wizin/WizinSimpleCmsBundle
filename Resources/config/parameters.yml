@@ -4,3 +4,4 @@ parameters:
     wizin_simple_cms.right_delimiter: "}>"
     wizin_simple_cms.template_dir: ~
     wizin_simple_cms.template_extension: "twig"
+    wizin_simple_cms.base_url: ~
