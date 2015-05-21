@@ -3,8 +3,10 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
 
 /**
  * Class FrontController
@@ -13,32 +15,28 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class FrontController extends Controller
 {
     /**
+     * \Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait
+     */
+    use ControllerTrait;
+
+    /**
      * @Route("/{path}", defaults={"path" = null})
      */
     public function showAction($path = null)
     {
         $template = $this->getTemplateService();
         $pathInfo = $this->getRequest()->getPathInfo();
-        // TODO: retrieve Content instance by $pathInfo
-        $content = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
-            ->setPathInfo($pathInfo)
-            ->setTitle('dummy')
-            ->setParameters(['body' => '<h1>Test</h1>'])
-            ->setTemplateFile('default.html.twig')
-        ;
+        // retrieve Content instance by $pathInfo
+        $content = $this->getContentRepository()->findOneBy(['pathInfo' => $pathInfo]);
+        if (is_null($content)) {
+            // invalid url
+            throw new NotFoundHttpException();
+        }
         // create response
         $response = new Response();
         $responseContent = $template->generateResponseContent($content);
         $response->setContent($responseContent);
 
         return $response;
-    }
-
-    /**
-     * @return \Wizin\Bundle\SimpleCmsBundle\Service\Template
-     */
-    protected function getTemplateService()
-    {
-        return $this->get('wizin_simple_cms.template');
     }
 }
