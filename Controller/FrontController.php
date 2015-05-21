@@ -20,9 +20,14 @@ class FrontController extends Controller
     use ControllerTrait;
 
     /**
-     * @Route("/{path}", name="wizin_simple_cms_front_show", defaults={"path" = null})
+     * @Route(
+     *   "/{path}",
+     *   name="wizin_simple_cms_front_show",
+     *   requirements={"path"=".*"},
+     *   defaults={"path"=""}
+     * )
      */
-    public function showAction($path = null)
+    public function showAction($path)
     {
         $template = $this->getTemplateService();
         $pathInfo = $this->getRequest()->getPathInfo();
