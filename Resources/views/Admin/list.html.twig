@@ -6,4 +6,41 @@
     <a href="{{ path('wizin_simple_cms_admin_add') }}">Create new content</a>
     <hr/>
     <h1>Contents list</h1>
+    <table>
+        <caption>contents list</caption>
+        <thead>
+        <tr>
+            <th>title</th>
+            <th>pathInfo</th>
+            <th>templateFiles</th>
+            <th>active</th>
+            <th>createdAt</th>
+            <th>updatedAt</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%- for content in contents -%}
+            <tr>
+                <td>{{ content.title }}</td>
+                <td>{{ content.pathInfo }}</td>
+                <td>{{ content.templateFile }}</td>
+                <td>{{ content.active }}</td>
+                <td>{{ content.createdAt|date('Y-m-d H:i') }}</td>
+                <td>{{ content.updatedAt|date('Y-m-d H:i') }}</td>
+                <td>
+                    <a class="wizin-simple-cms__link" href="{{ baseUrl }}{{ content.pathInfo }}">view</a>
+                </td>
+            </tr>
+        {%- endfor -%}
+        </tbody>
+    </table>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(".wizin-simple-cms__link").click(function(event) {
+            event.preventDefault();
+            var url = $(this).attr('href');
+            window.open(url);
+        });
+    </script>
 {% endblock %}

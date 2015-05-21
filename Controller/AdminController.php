@@ -29,7 +29,10 @@ class AdminController extends Controller
      */
     public function listAction()
     {
-        return [];
+        $contents = $this->getDoctrine()->getManager()->getRepository('WizinSimpleCmsBundle:Content')->findAll();
+        $baseUrl = $this->getBaseUrl();
+
+        return ['contents' => $contents, 'baseUrl' => $baseUrl];
     }
 
     /**
@@ -96,5 +99,25 @@ class AdminController extends Controller
         }
 
         return  $this->createForm(new ContentType(), $content);
+    }
+
+    /**
+     * @return mixed|string
+     */
+    protected function getBaseUrl()
+    {
+        $baseUrl = $this->container->getParameter('wizin_simple_cms.base_url');
+        if (is_null($baseUrl)) {
+            $baseUrl = preg_replace(
+                '@' .preg_quote($this->getRequest()->getBaseUrl()) .'@',
+                '',
+                $this->getRequest()->getUriForPath('/')
+            );
+        }
+        if (substr($baseUrl, -1) === '/') {
+            $baseUrl = substr($baseUrl, 0, -1);
+        }
+
+        return $baseUrl;
     }
 }
