@@ -6,3 +6,10 @@ services:
         calls:
             - [setTemplateDir, ["%wizin_simple_cms.template_dir%"]]
 
+    wizin_simple_cms.event.filter_controller_listener:
+        class: "%wizin_simple_cms.event.filter_controller_listener.class%"
+        calls:
+            - [setEventDispatcher, ["@event_dispatcher"]]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
