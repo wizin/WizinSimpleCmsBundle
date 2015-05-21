@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 use Wizin\Bundle\SimpleCmsBundle\Form\ContentType;
+use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
 
 /**
  * Class AdminController
@@ -14,6 +15,11 @@ use Wizin\Bundle\SimpleCmsBundle\Form\ContentType;
  */
 class AdminController extends Controller
 {
+    /**
+     * \Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait
+     */
+    use ControllerTrait;
+
     /**
      * @Route("/", name="wizin_simple_cms_admin_index")
      * @Template()
@@ -29,7 +35,7 @@ class AdminController extends Controller
      */
     public function listAction()
     {
-        $contents = $this->getDoctrine()->getManager()->getRepository('WizinSimpleCmsBundle:Content')->findAll();
+        $contents = $this->getContentRepository()->findAll();
         $baseUrl = $this->getBaseUrl();
 
         return ['contents' => $contents, 'baseUrl' => $baseUrl];
@@ -55,8 +61,8 @@ class AdminController extends Controller
             $form->handleRequest($this->getRequest());
             if ($form->isValid()) {
                 // persist entity
-                $this->getDoctrine()->getManager()->persist($content);
-                $this->getDoctrine()->getManager()->flush();
+                $this->getEntityManager()->persist($content);
+                $this->getEntityManager()->flush();
 
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
@@ -72,14 +78,6 @@ class AdminController extends Controller
     public function selectTemplateFileAction()
     {
         return ['templateFiles' => $this->getTemplateService()->getTemplateFiles()];
-    }
-
-    /**
-     * @return \Wizin\Bundle\SimpleCmsBundle\Service\Template
-     */
-    protected function getTemplateService()
-    {
-        return $this->get('wizin_simple_cms.template');
     }
 
     /**
