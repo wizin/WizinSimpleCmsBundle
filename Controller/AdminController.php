@@ -47,13 +47,7 @@ class AdminController extends Controller
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
         $content = new Content();
-        $parameters = [];
-        foreach ($this->getTemplateService()->getPlaceholders($templateFile) as $placeholder) {
-            $parameters[$placeholder] = null;
-        }
-        $content->setParameters($parameters);
-        $content->setTemplateFile($templateFile);
-        $form = $this->createForm(new ContentType(), $content);
+        $form = $this->createContentForm($content, $templateFile);
         if ($this->getRequest()->isMethod('POST')) {
             $form->handleRequest($this->getRequest());
             if ($form->isValid()) {
@@ -79,5 +73,24 @@ class AdminController extends Controller
     protected function getTemplateService()
     {
         return $this->get('wizin_simple_cms.template');
+    }
+
+    /**
+     * @param Content $content
+     * @param null $templateFile
+     * @return \Symfony\Component\Form\Form
+     */
+    protected function createContentForm(Content $content, $templateFile = null)
+    {
+        $parameters = [];
+        foreach ($this->getTemplateService()->getPlaceholders($templateFile) as $placeholder) {
+            $parameters[$placeholder] = null;
+        }
+        $content->setParameters(array_merge($parameters, (array) $content->getParameters()));
+        if (is_null($templateFile) === false) {
+            $content->setTemplateFile($templateFile);
+        }
+
+        return  $this->createForm(new ContentType(), $content);
     }
 }
