@@ -5,6 +5,7 @@ namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Form;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
@@ -60,12 +61,7 @@ class AdminController extends Controller
         $content = new Content();
         $form = $this->createContentForm($content, $templateFile);
         if ($this->getRequest()->isMethod('POST')) {
-            $form->handleRequest($this->getRequest());
-            if ($form->isValid()) {
-                // persist entity
-                $this->getEntityManager()->persist($content);
-                $this->getEntityManager()->flush();
-
+            if ($this->saveContent($form, $content)) {
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
@@ -119,6 +115,25 @@ class AdminController extends Controller
         }
 
         return  $this->createForm(new ContentType(), $content);
+    }
+
+    /**
+     * @param Form $form
+     * @param Content $content
+     * @return bool
+     */
+    protected function saveContent(Form $form, Content $content)
+    {
+        $result = false;
+        $form->handleRequest($this->getRequest());
+        if ($form->isValid()) {
+            // persist entity
+            $this->getEntityManager()->persist($content);
+            $this->getEntityManager()->flush();
+            $result = true;
+        }
+
+        return $result;
     }
 
     /**
