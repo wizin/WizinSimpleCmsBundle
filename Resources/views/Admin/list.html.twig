@@ -25,11 +25,19 @@
                 <td>{{ content.title }}</td>
                 <td>{{ content.pathInfo }}</td>
                 <td>{{ content.templateFile }}</td>
-                <td>{{ content.active }}</td>
+                <td>
+                    {%- if content.active == true -%}
+                        true
+                    {%- else -%}
+                        false
+                    {%- endif -%}
+                </td>
                 <td>{{ content.createdAt|date('Y-m-d H:i') }}</td>
                 <td>{{ content.updatedAt|date('Y-m-d H:i') }}</td>
                 <td>
                     <a class="wizin-simple-cms__link" href="{{ baseUrl }}{{ content.pathInfo }}">view</a>
+                    &nbsp; / &nbsp;
+                    <a class="wizin-simple-cms__link" href="{{ path('wizin_simple_cms_admin_preview', {'id': content.id}) }}">preview</a>
                 </td>
             </tr>
         {%- endfor -%}

@@ -3,6 +3,8 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
@@ -78,6 +80,26 @@ class AdminController extends Controller
     public function selectTemplateFileAction()
     {
         return ['templateFiles' => $this->getTemplateService()->getTemplateFiles()];
+    }
+
+    /**
+     * @Route("/preview/{id}", name="wizin_simple_cms_admin_preview")
+     */
+    public function previewAction($id)
+    {
+        $template = $this->getTemplateService();
+        // retrieve Content instance by $id
+        $content = $this->getContentRepository()->find($id);
+        if (is_null($content)) {
+            // invalid url
+            throw new NotFoundHttpException();
+        }
+        // create response
+        $response = new Response();
+        $responseContent = $template->generateResponseContent($content);
+        $response->setContent($responseContent);
+
+        return $response;
     }
 
     /**
