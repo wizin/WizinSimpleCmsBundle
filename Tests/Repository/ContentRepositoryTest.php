@@ -19,6 +19,7 @@ class ContentRepositoryTest extends RepositoryTestCase
             ]
         );
     }
+
     /**
      * @test
      * @dataProvider retrieveEnableContentProvider

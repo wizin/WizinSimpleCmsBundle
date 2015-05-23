@@ -37,15 +37,15 @@ class ContentRepository extends EntityRepository
         $queryBuilder
             ->select('content')
             ->from('\Wizin\Bundle\SimpleCmsBundle\Entity\Content', 'content')
-            ->where('content.id != :id')
-            ->andWhere('content.pathInfo = :pathInfo')
-            ->setParameters(
-                [
-                    'id' => $content->getId(),
-                    'pathInfo' => $content->getPathInfo(),
-                ]
-            )
+            ->where('content.pathInfo = :pathInfo')
+            ->setParameter('pathInfo', $content->getPathInfo())
         ;
+        if (is_null($content->getId()) === false) {
+            $queryBuilder
+                ->andWhere('content.id != :id')
+                ->setParameter('id', $content->getId())
+            ;
+        }
         $entity = $queryBuilder->getQuery()->getOneOrNullResult();
 
         return (is_null($entity) === false);
