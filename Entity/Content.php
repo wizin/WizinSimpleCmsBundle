@@ -170,7 +170,12 @@ class Content
      */
     public function setParameters(array $parameters)
     {
-        $this->parameters = $parameters;
+        $this->parameters = array_map(
+            function ($string) {
+                return strtr($string, array_fill_keys(["\r\n", "\r", "\n"], "\n"));
+            },
+            $parameters
+        );
 
         return $this;
     }
