@@ -1,0 +1,22 @@
+{
+  "name": "wizin/simple-cms-bundle",
+  "description": "Simple CMS bundle",
+  "keywords": [],
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Makoto Hashiguchi",
+      "email": "gusagi@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "wizin/base-bundle": "~0.0"
+  },
+  "autoload": {
+    "psr-0": { "Wizin\\Bundle\\SimpleCmsBundle": "" }
+  },
+  "target-dir": "Wizin/Bundle/SimpleCmsBundle",
+  "minimum-stability": "dev"
+}

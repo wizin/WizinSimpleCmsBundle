@@ -1,0 +1,9 @@
+wizin_simple_cms_front:
+    resource: "@WizinSimpleCmsBundle/Controller/FrontController.php"
+    prefix:   /front
+    type:     annotation
+
+wizin_simple_cms_admin:
+    resource: "@WizinSimpleCmsBundle/Controller/AdminController.php"
+    prefix:   /admin
+    type:     annotation
