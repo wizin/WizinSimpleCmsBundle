@@ -3,7 +3,6 @@
   "description": "Simple CMS bundle",
   "keywords": [],
   "type": "symfony-bundle",
-  "version": "0.0.1",
   "license": "MIT",
   "authors": [
     {
