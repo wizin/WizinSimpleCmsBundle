@@ -23,6 +23,9 @@ class ContentRepositoryTest extends RepositoryTestCase
     /**
      * @test
      * @dataProvider retrieveEnableContentProvider
+     * @param string $pathInfo
+     * @param null|string $class
+     * @param null|array $properties
      */
     public function retrieveEnableContent($pathInfo, $class, $properties)
     {
@@ -55,6 +58,8 @@ class ContentRepositoryTest extends RepositoryTestCase
     /**
      * @test
      * @dataProvider isDuplicatedProvider
+     * @param Content $content
+     * @param bool $expected
      */
     public function isDuplicated($content, $expected)
     {
