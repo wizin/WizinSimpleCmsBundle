@@ -52,9 +52,9 @@ class Content
     /**
      * @var string
      *
-     * @ORM\Column(name="parameters", type="text")
+     * @ORM\Column(name="parameters", type="json_array")
      * @Assert\NotNull()
-     * @Assert\Type(type="string", message="The value {{ value }} is not a valid {{ type }}.")
+     * @Assert\Type(type="array", message="The value {{ value }} is not a valid {{ type }}.")
      */
     protected $parameters;
 
@@ -170,7 +170,7 @@ class Content
      */
     public function setParameters(array $parameters)
     {
-        $this->parameters = json_encode($parameters);
+        $this->parameters = $parameters;
 
         return $this;
     }
@@ -182,7 +182,7 @@ class Content
      */
     public function getParameters()
     {
-        return json_decode($this->parameters, true);
+        return $this->parameters;
     }
 
     /**
