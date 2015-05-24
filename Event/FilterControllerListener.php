@@ -3,6 +3,8 @@ namespace Wizin\Bundle\SimpleCmsBundle\Event;
 
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Wizin\Bundle\SimpleCmsBundle\Controller\FrontController;
+use Wizin\Bundle\SimpleCmsBundle\Controller\AdminController;
 
 class FilterControllerListener
 {
@@ -28,25 +30,22 @@ class FilterControllerListener
         if (is_array($controller) === false) {
             return;
         }
-        switch (get_class($controller[0])) {
-            case 'Wizin\Bundle\SimpleCmsBundle\Controller\FrontController':
-                $event = new FrontControllerEvent(
-                    $event->getKernel(),
-                    $controller,
-                    $event->getRequest(),
-                    $event->getRequestType()
-                );
-                $this->dispatcher->dispatch(Event::ON_FRONT_CONTROLLER, $event);
-                break;
-            case 'Wizin\Bundle\SimpleCmsBundle\Controller\AdminController':
-                $event = new AdminControllerEvent(
-                    $event->getKernel(),
-                    $controller,
-                    $event->getRequest(),
-                    $event->getRequestType()
-                );
-                $this->dispatcher->dispatch(Event::ON_ADMIN_CONTROLLER, $event);
-                break;
+        if ($controller[0] instanceof FrontController) {
+            $event = new FrontControllerEvent(
+                $event->getKernel(),
+                $controller,
+                $event->getRequest(),
+                $event->getRequestType()
+            );
+            $this->dispatcher->dispatch(Event::ON_FRONT_CONTROLLER, $event);
+        } elseif ($controller[0] instanceof AdminController) {
+            $event = new AdminControllerEvent(
+                $event->getKernel(),
+                $controller,
+                $event->getRequest(),
+                $event->getRequestType()
+            );
+            $this->dispatcher->dispatch(Event::ON_ADMIN_CONTROLLER, $event);
         }
     }
 }
