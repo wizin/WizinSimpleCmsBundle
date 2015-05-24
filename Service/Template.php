@@ -146,8 +146,9 @@ class Template
             $filesystem->dumpFile($cachePath, $source);
         }
         $twig = $this->container->get('twig');
+        $twig->getLoader()->addPath($this->getCacheDir());
         $responseContent = $twig->render(
-            $cachePath,
+            $content->getId() .'.html.twig',
             [
                 'title' => $content->getTitle(),
             ]
@@ -218,12 +219,19 @@ class Template
     }
 
     /**
+     * @return string cache directory path
+     */
+    protected function getCacheDir()
+    {
+        return $this->container->get('kernel')->getCacheDir() . '/' . static::CACHE_DIR_NAME;
+    }
+
+    /**
      * @param Content $content
      * @return string cache file path
      */
     protected function getCachePath(Content $content)
     {
-        return $this->container->get('kernel')->getCacheDir() . '/'
-        . static::CACHE_DIR_NAME . '/' .$content->getId() . '.html.twig';
+        return $this->getCacheDir() . '/' .$content->getId() . '.html.twig';
     }
 }
