@@ -94,6 +94,21 @@ class TemplateTest extends ServiceTestCase
 
     /**
      * @test
+     */
+    public function getOptions()
+    {
+        $templateDir = dirname(__DIR__) . '/Resources/templates/';
+        $service = $this->getService();
+        $service->setTemplateDir($templateDir);
+        $expected = [
+            'header' => ['label' => 'Header Block'],
+            'footer' => ['label' => 'Footer Block'],
+        ];
+        $this->assertSame($expected, $this->getService()->getOptions('test.html.twig'));
+    }
+
+    /**
+     * @test
      * @dataProvider generateResponseContentProvider
      */
     public function generateResponseContent(Content $content, $expected)

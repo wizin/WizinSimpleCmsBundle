@@ -66,8 +66,9 @@ class AdminController extends Controller
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
+        $options = $this->getTemplateService()->getOptions($templateFile);
 
-        return ['form' => $form->createView()];
+        return ['form' => $form->createView(), 'options' => $options];
     }
 
     /**
@@ -91,8 +92,9 @@ class AdminController extends Controller
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
+        $options = $this->getTemplateService()->getOptions($content->getTemplateFile());
 
-        return ['form' => $form->createView()];
+        return ['form' => $form->createView(), $options];
     }
 
     /**
@@ -109,7 +111,6 @@ class AdminController extends Controller
      */
     public function previewAction($id)
     {
-        $template = $this->getTemplateService();
         // retrieve Content instance by $id
         $content = $this->getContentRepository()->find($id);
         if (is_null($content)) {
@@ -118,7 +119,7 @@ class AdminController extends Controller
         }
         // create response
         $response = new Response();
-        $responseContent = $template->generateResponseContent($content);
+        $responseContent = $this->getTemplateService()->generateResponseContent($content);
         $response->setContent($responseContent);
 
         return $response;
