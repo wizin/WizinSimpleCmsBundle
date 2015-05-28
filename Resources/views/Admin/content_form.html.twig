@@ -26,9 +26,15 @@
     {{ form_widget(form.active) }}
 </div>
 <hr/>
-{#- parameters -#}
-    {{ form_label (form.parameters) }}
-    {{ form_errors(form.parameters) }}
-    {{ form_widget(form.parameters) }}
+    {#- parameters -#}
+    {%- for parameter in form.parameters -%}
+        {%- if options[parameter.vars.name].label is defined -%}
+            {{ form_label (parameter, options[parameter.vars.name].label) }}
+        {%- else -%}
+            {{ form_label (parameter) }}
+        {%- endif -%}
+        {{ form_errors(parameter) }}
+        {{ form_widget(parameter) }}
+    {%- endfor -%}
 <input type="submit" />
 {{ form_end(form) }}

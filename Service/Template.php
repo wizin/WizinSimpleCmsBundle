@@ -21,6 +21,11 @@ class Template
     const PLACEHOLDER_INDEX = 3;
 
     /**
+     * regex index for option
+     */
+    const OPTION_INDEX = 5;
+
+    /**
      * cache directory name
      */
     const CACHE_DIR_NAME = 'cms';
@@ -130,6 +135,29 @@ class Template
     }
 
     /**
+     * @param $templateFile
+     * @return array options
+     */
+    public function getOptions($templateFile)
+    {
+        $options = [];
+        $pattern = $this->getPlaceholderRegex();
+        preg_match_all($pattern, $this->getTemplateSource($templateFile), $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $placeholder = $match[static::PLACEHOLDER_INDEX];
+            $option = $match[static::OPTION_INDEX];
+            if (strlen($option) > 0) {
+                $option = trim($option);
+            }
+            if ($option !== '' && isset($options[$placeholder]) === false) {
+                $options[$placeholder] = json_decode($option, true);
+            }
+        }
+
+        return $options;
+    }
+
+    /**
      * @param Content $content
      * @return string $responseContent content string for response
      */
@@ -174,7 +202,7 @@ class Template
     {
         return '/'
         . '(' . preg_quote($this->container->getParameter('wizin_simple_cms.left_delimiter'), '/') . ')'
-        . '(\s*)(\S+)(\s*)'
+        . '(\s*)(\S+)(\s*)(.*?)'
         . '(' . preg_quote($this->container->getParameter('wizin_simple_cms.right_delimiter'), '/') . ')'
         . '/';
     }
