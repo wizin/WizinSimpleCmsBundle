@@ -18,7 +18,7 @@ class ContentType extends AbstractType
         $builder->add('id', 'hidden');
         $builder->add('pathInfo');
         $builder->add('title');
-        $builder->add('parameters', 'collection', ['type' => 'textarea']);
+        $builder->add('parameters', 'collection', ['type' => 'textarea', 'required' => false]);
         $builder->add('templateFile', 'text', ['read_only' => true]);
         $builder->add('active', 'checkbox', ['required' => false]);
     }
