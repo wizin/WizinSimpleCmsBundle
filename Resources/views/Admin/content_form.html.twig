@@ -28,13 +28,15 @@
 <hr/>
     {#- parameters -#}
     {%- for parameter in form.parameters -%}
-        {%- if options[parameter.vars.name].label is defined -%}
-            {{ form_label (parameter, options[parameter.vars.name].label) }}
-        {%- else -%}
-            {{ form_label (parameter) }}
-        {%- endif -%}
-        {{ form_errors(parameter) }}
-        {{ form_widget(parameter) }}
+        <div>
+            {%- if options[parameter.vars.name] is defined -%}
+                {{ form_label (parameter, null, options[parameter.vars.name]) }}
+            {%- else -%}
+                {{ form_label (parameter) }}
+            {%- endif -%}
+            {{ form_errors(parameter) }}
+            {{ form_widget(parameter) }}
+        </div>
     {%- endfor -%}
 <input type="submit" />
 {{ form_end(form) }}

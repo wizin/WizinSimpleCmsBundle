@@ -94,7 +94,7 @@ class AdminController extends Controller
         }
         $options = $this->getTemplateService()->getOptions($content->getTemplateFile());
 
-        return ['form' => $form->createView(), $options];
+        return ['form' => $form->createView(), 'options' => $options];
     }
 
     /**
@@ -132,11 +132,16 @@ class AdminController extends Controller
      */
     protected function createContentForm(Content $content, $templateFile = null)
     {
-        $parameters = [];
+        $hash = [];
+        $parameters = (array) $content->getParameters();
         foreach ($this->getTemplateService()->getPlaceholders($templateFile) as $placeholder) {
-            $parameters[$placeholder] = null;
+            if (isset($parameters[$placeholder])) {
+                $hash[$placeholder] = $parameters[$placeholder];
+            } else {
+                $hash[$placeholder] = null;
+            }
         }
-        $content->setParameters(array_merge($parameters, (array) $content->getParameters()));
+        $content->setParameters($hash);
         if (is_null($templateFile) === false) {
             $content->setTemplateFile($templateFile);
         }
