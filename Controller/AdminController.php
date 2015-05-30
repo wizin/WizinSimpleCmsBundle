@@ -94,7 +94,7 @@ class AdminController extends Controller
         }
         $options = $this->getTemplateService()->getOptions($content->getTemplateFile());
 
-        return ['form' => $form->createView(), $options];
+        return ['form' => $form->createView(), 'options' => $options];
     }
 
     /**
