@@ -29,8 +29,8 @@
     {#- parameters -#}
     {%- for parameter in form.parameters -%}
         <div>
-            {%- if options[parameter.vars.name] is defined -%}
-                {{ form_label (parameter, null, options[parameter.vars.name]) }}
+            {%- if options[parameter.vars.name].label is defined -%}
+                {{ form_label (parameter, null, options[parameter.vars.name].label) }}
             {%- else -%}
                 {{ form_label (parameter) }}
             {%- endif -%}

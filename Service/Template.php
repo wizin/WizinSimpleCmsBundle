@@ -150,7 +150,13 @@ class Template
                 $option = trim($option);
             }
             if ($option !== '' && isset($options[$placeholder]) === false) {
-                $options[$placeholder] = json_decode($option, true);
+                $option = json_decode($option, true);
+                foreach($option as $key => & $value) {
+                    if (is_array($value) === false) {
+                        $value = [$key => $value];
+                    }
+                }
+                $options[$placeholder] = $option;
             }
         }
 

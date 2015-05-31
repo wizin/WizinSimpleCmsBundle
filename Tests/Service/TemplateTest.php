@@ -101,8 +101,8 @@ class TemplateTest extends ServiceTestCase
         $service = $this->getService();
         $service->setTemplateDir($templateDir);
         $expected = [
-            'header' => ['label' => 'Header Block'],
-            'footer' => ['label' => 'Footer Block'],
+            'header' => ['label' => ['label' => 'Header Block']],
+            'footer' => ['label' => ['label' => 'Footer Block']],
         ];
         $this->assertSame($expected, $this->getService()->getOptions('test.html.twig'));
     }
