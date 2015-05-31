@@ -40,7 +40,8 @@ class TemplateTest extends ServiceTestCase
             [
                 null,
                 [
-                    'default.html.twig'
+                    'default.html.twig',
+                    'free_format.html.twig'
                 ]
             ],
             [
