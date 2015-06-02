@@ -161,7 +161,7 @@ class TemplateTest extends ServiceTestCase
     {
         $service = $this->getService();
         $filesystem = new Filesystem();
-        $cache = static::$kernel->getCacheDir() . '/' .  $service::CACHE_DIR_NAME . '/' .$content->getId() .'.html.twig';
+        $cache = static::$kernel->getCacheDir() . '/' .  $service::CACHE_DIR_NAME . '/' .$content->getId() . '.' .$expected['suffix'] .'.html.twig';
         $filesystem->dumpFile($cache, '');
         $this->assertTrue($filesystem->exists($cache));
         $service->removeCache($content);
@@ -185,7 +185,14 @@ class TemplateTest extends ServiceTestCase
             ->setParameters(['body' => $body])
             ->setTemplateFile('default.html.twig')
         ;
-        $data[] = [$testContent, ['title' => $title, 'body' => $body]];
+        $seed = $testContent->getId() . $testContent->getPathInfo() . $testContent->getTitle()
+            . $testContent->getTemplateFile() . json_encode($testContent->getParameters());
+        if (function_exists('hash')) {
+            $suffix = hash('sha256', $seed);
+        } else {
+            $suffix = sha1($seed);
+        }
+        $data[] = [$testContent, ['suffix' => $suffix]];
         $title = 'dummy page';
         $body = '<h1>Dummy</h1>';
         $dummyContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
@@ -195,7 +202,14 @@ class TemplateTest extends ServiceTestCase
             ->setParameters(['body' => $body])
             ->setTemplateFile('default.html.twig')
         ;
-        $data[] = [$dummyContent, ['title' => $title, 'body' => $body]];
+        $seed = $dummyContent->getId() . $dummyContent->getPathInfo() . $dummyContent->getTitle()
+            . $dummyContent->getTemplateFile() . json_encode($dummyContent->getParameters());
+        if (function_exists('hash')) {
+            $suffix = hash('sha256', $seed);
+        } else {
+            $suffix = sha1($seed);
+        }
+        $data[] = [$dummyContent, ['suffix' => $suffix]];
 
         return $data;
     }
