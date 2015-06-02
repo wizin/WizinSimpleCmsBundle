@@ -2,11 +2,9 @@
 
 namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
 
 /**
  * Class FrontController
@@ -14,11 +12,6 @@ use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
  */
 class FrontController extends Controller
 {
-    /**
-     * \Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait
-     */
-    use ControllerTrait;
-
     /**
      * @Route(
      *   "/{path}",

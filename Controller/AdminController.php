@@ -2,7 +2,6 @@
 
 namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
@@ -11,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 use Wizin\Bundle\SimpleCmsBundle\Form\ContentType;
-use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
 
 /**
  * Class AdminController
@@ -19,11 +17,6 @@ use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
  */
 class AdminController extends Controller
 {
-    /**
-     * \Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait
-     */
-    use ControllerTrait;
-
     /**
      * @Route("/", name="wizin_simple_cms_admin_index")
      * @Template()
