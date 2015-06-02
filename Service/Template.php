@@ -1,19 +1,19 @@
 <?php
 /**
- * TemplateSevice
+ * Template Service
  */
 namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use Wizin\Bundle\BaseBundle\Service\Service;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
 /**
  * Class Template
  * @package Wizin\Bundle\SimpleCmsBundle\Service
  */
-class Template
+class Template extends Service
 {
     /**
      * regex index for placeholder
@@ -31,21 +31,15 @@ class Template
     const CACHE_DIR_NAME = 'cms';
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-
-    /**
      * @var string path of template directory
      */
     protected $templateDir;
 
     /**
-     * @param ContainerInterface $container
+     *
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
         $this->templateDir = dirname(__DIR__) . '/Resources/templates';
     }
 

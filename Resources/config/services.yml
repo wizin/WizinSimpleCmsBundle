@@ -1,9 +1,8 @@
 services:
     wizin_simple_cms.template:
         class: "%wizin_simple_cms.service.template.class%"
-        arguments:
-            container: "@service_container"
         calls:
+            - [setContainer, ["@service_container"]]
             - [setTemplateDir, ["%wizin_simple_cms.template_dir%"]]
 
     wizin_simple_cms.event.filter_controller_listener:
