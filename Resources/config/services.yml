@@ -5,6 +5,11 @@ services:
             - [setContainer, ["@service_container"]]
             - [setTemplateDir, ["%wizin_simple_cms.template_dir%"]]
 
+    wizin_simple_cms.content:
+        class: "%wizin_simple_cms.service.content.class%"
+        calls:
+            - [setContainer, ["@service_container"]]
+
     wizin_simple_cms.event.filter_controller_listener:
         class: "%wizin_simple_cms.event.filter_controller_listener.class%"
         calls:
