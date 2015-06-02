@@ -12,4 +12,11 @@ use Wizin\Bundle\BaseBundle\Service\Service;
  */
 class Content extends Service
 {
+    /**
+     * @return \Wizin\Bundle\SimpleCmsBundle\Repository\ContentRepository
+     */
+    public function getContentRepository()
+    {
+        return $this->getEntityManager()->getRepository('WizinSimpleCmsBundle:Content');
+    }
 }
