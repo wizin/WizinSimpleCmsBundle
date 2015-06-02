@@ -180,9 +180,9 @@ class Template
             $filesystem->dumpFile($cachePath, $source);
         }
         $twig = $this->container->get('twig');
-        $twig->getLoader()->addPath($this->getCacheDir());
+        $twig->getLoader()->addPath(dirname($cachePath));
         $responseContent = $twig->render(
-            $content->getId() .'.html.twig',
+            basename($cachePath),
             [
                 'title' => $content->getTitle(),
             ]
@@ -197,8 +197,19 @@ class Template
     public function removeCache(Content $content)
     {
         $filesystem = new Filesystem();
-        $cache = $this->getCachePath($content);
-        $filesystem->remove($cache);
+        if ($filesystem->exists($this->getCacheDir())) {
+            $finder = new Finder();
+            $finder
+                ->in($this->getCacheDir())
+                ->files()
+                ->followLinks()
+                ->name($content->getId() . '.*.html.twig')
+            ;
+            foreach ($finder as $file) {
+                /** @var \SplFileInfo $file */
+                $filesystem->remove($file->getPathname());
+            }
+        }
     }
 
     /**
@@ -266,6 +277,13 @@ class Template
      */
     protected function getCachePath(Content $content)
     {
-        return $this->getCacheDir() . '/' .$content->getId() . '.html.twig';
+        $seed = $content->getId() . $content->getPathInfo() . $content->getTitle()
+            . $content->getTemplateFile() . json_encode($content->getParameters());
+        if (function_exists('hash')) {
+            $suffix = hash('sha256', $seed);
+        } else {
+            $suffix = sha1($seed);
+        }
+        return $this->getCacheDir() . '/' .$content->getId() . '.' .$suffix . '.html.twig';
     }
 }
