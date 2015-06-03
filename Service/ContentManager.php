@@ -1,16 +1,16 @@
 <?php
 /**
- * Content Service
+ * ContentManager
  */
 namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
 use Wizin\Bundle\BaseBundle\Service\Service;
 
 /**
- * Class Content
+ * Class ContentManager
  * @package Wizin\Bundle\SimpleCmsBundle\Service
  */
-class Content extends Service
+class ContentManager extends Service
 {
     /**
      * @return \Wizin\Bundle\SimpleCmsBundle\Repository\ContentRepository

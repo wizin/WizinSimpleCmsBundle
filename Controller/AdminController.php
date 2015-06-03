@@ -32,7 +32,7 @@ class AdminController extends Controller
      */
     public function listAction()
     {
-        $contents = $this->getContentService()->getContentRepository()->findAll();
+        $contents = $this->getContentManager()->getContentRepository()->findAll();
         $baseUrl = $this->getBaseUrl();
 
         return ['contents' => $contents, 'baseUrl' => $baseUrl];
@@ -74,7 +74,7 @@ class AdminController extends Controller
     public function editAction($id)
     {
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
-        $content = $this->getContentService()->getContentRepository()->find($id);
+        $content = $this->getContentManager()->getContentRepository()->find($id);
         if (is_null($content)) {
             // invalid url
             throw new NotFoundHttpException();
@@ -105,7 +105,7 @@ class AdminController extends Controller
     public function previewAction($id)
     {
         // retrieve Content instance by $id
-        $content = $this->getContentService()->getContentRepository()->find($id);
+        $content = $this->getContentManager()->getContentRepository()->find($id);
         if (is_null($content)) {
             // invalid url
             throw new NotFoundHttpException();
@@ -152,7 +152,7 @@ class AdminController extends Controller
         $result = false;
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
-            if ($this->getContentService()->getContentRepository()->isDuplicated($content) === false) {
+            if ($this->getContentManager()->getContentRepository()->isDuplicated($content) === false) {
                 // persist entity
                 $this->getEntityManager()->persist($content);
                 $this->getEntityManager()->flush();

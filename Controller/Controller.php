@@ -22,11 +22,11 @@ class Controller extends BaseController
     }
 
     /**
-     * @return \Wizin\Bundle\SimpleCmsBundle\Service\Content
+     * @return \Wizin\Bundle\SimpleCmsBundle\Service\ContentManager
      */
-    protected function getContentService()
+    protected function getContentManager()
     {
-        return $this->get('wizin_simple_cms.content');
+        return $this->get('wizin_simple_cms.content_manager');
     }
 }
 
