@@ -3,8 +3,8 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Wizin\Bundle\BaseBundle\Traits\Entity\Timestampable;
 
 /**
  * Content
@@ -22,6 +22,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Content
 {
+    /**
+     * \Wizin\Bundle\BaseBundle\Traits\Entity\Timestampable
+     */
+    use Timestampable;
+
     /**
      * @var string
      *
@@ -75,22 +80,6 @@ class Content
      * @Assert\Type(type="bool", message="The value {{ value }} is not a valid {{ type }}.")
      */
     protected $active;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updatedAt;
 
 
     /**
@@ -234,51 +223,5 @@ class Content
     public function getActive()
     {
         return $this->active;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Content
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Content
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 }
