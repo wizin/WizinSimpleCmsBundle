@@ -22,7 +22,6 @@ class FrontController extends Controller
      */
     public function showAction($path)
     {
-        $template = $this->getTemplateService();
         $pathInfo = $this->getRequest()->getPathInfo();
         // retrieve Content instance by $pathInfo
         $content = $this->getContentManager()->getContentRepository()->retrieveEnableContent($pathInfo);
@@ -32,7 +31,7 @@ class FrontController extends Controller
         }
         // create response
         $response = new Response();
-        $responseContent = $template->generateResponseContent($content);
+        $responseContent = $this->getTemplateHandler()->generateResponseContent($content);
         $response->setContent($responseContent);
 
         return $response;

@@ -59,7 +59,7 @@ class AdminController extends Controller
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
-        $options = $this->getTemplateService()->getOptions($templateFile);
+        $options = $this->getTemplateHandler()->getOptions($templateFile);
 
         return ['form' => $form->createView(), 'options' => $options];
     }
@@ -85,7 +85,7 @@ class AdminController extends Controller
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
-        $options = $this->getTemplateService()->getOptions($content->getTemplateFile());
+        $options = $this->getTemplateHandler()->getOptions($content->getTemplateFile());
 
         return ['form' => $form->createView(), 'options' => $options];
     }
@@ -96,7 +96,7 @@ class AdminController extends Controller
      */
     public function selectTemplateFileAction()
     {
-        return ['templateFiles' => $this->getTemplateService()->getTemplateFiles()];
+        return ['templateFiles' => $this->getTemplateHandler()->getTemplateFiles()];
     }
 
     /**
@@ -112,7 +112,7 @@ class AdminController extends Controller
         }
         // create response
         $response = new Response();
-        $responseContent = $this->getTemplateService()->generateResponseContent($content);
+        $responseContent = $this->getTemplateHandler()->generateResponseContent($content);
         $response->setContent($responseContent);
 
         return $response;
@@ -127,7 +127,7 @@ class AdminController extends Controller
     {
         $hash = [];
         $parameters = (array) $content->getParameters();
-        foreach ($this->getTemplateService()->getPlaceholders($templateFile) as $placeholder) {
+        foreach ($this->getTemplateHandler()->getPlaceholders($templateFile) as $placeholder) {
             if (isset($parameters[$placeholder])) {
                 $hash[$placeholder] = $parameters[$placeholder];
             } else {
@@ -157,7 +157,7 @@ class AdminController extends Controller
                 $this->getEntityManager()->persist($content);
                 $this->getEntityManager()->flush();
                 // remove old cache
-                $this->getTemplateService()->removeCache($content);
+                $this->getTemplateHandler()->removeCache($content);
                 $result = true;
             } else {
                 $form->addError(new FormError(

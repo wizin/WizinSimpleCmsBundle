@@ -1,6 +1,6 @@
 services:
-    wizin_simple_cms.template:
-        class: "%wizin_simple_cms.service.template.class%"
+    wizin_simple_cms.template_handler:
+        class: "%wizin_simple_cms.service.template_handler.class%"
         calls:
             - [setContainer, ["@service_container"]]
             - [setTemplateDir, ["%wizin_simple_cms.template_dir%"]]

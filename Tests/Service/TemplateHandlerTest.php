@@ -6,14 +6,14 @@ use Symfony\Component\Filesystem\Filesystem;
 use Wizin\Bundle\BaseBundle\TestCase\ServiceTestCase;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
-class TemplateTest extends ServiceTestCase
+class TemplateHandlerTest extends ServiceTestCase
 {
     /**
      * @test
      */
     public function isValidService()
     {
-        $this->assertInstanceOf('\Wizin\Bundle\SimpleCmsBundle\Service\Template', $this->getService());
+        $this->assertInstanceOf('\Wizin\Bundle\SimpleCmsBundle\Service\TemplateHandler', $this->getService());
     }
 
     /**
@@ -227,11 +227,11 @@ class TemplateTest extends ServiceTestCase
     }
 
     /**
-     * @return \Wizin\Bundle\SimpleCmsBundle\Service\Template
+     * @return \Wizin\Bundle\SimpleCmsBundle\Service\TemplateHandler
      */
     protected function getService()
     {
-        return $this->getContainer()->get('wizin_simple_cms.template');
+        return $this->getContainer()->get('wizin_simple_cms.template_handler');
     }
 
     /**

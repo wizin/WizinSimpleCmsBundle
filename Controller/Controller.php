@@ -14,11 +14,11 @@ use Wizin\Bundle\BaseBundle\Controller\Controller as BaseController;
 class Controller extends BaseController
 {
     /**
-     * @return \Wizin\Bundle\SimpleCmsBundle\Service\Template
+     * @return \Wizin\Bundle\SimpleCmsBundle\Service\TemplateHandler
      */
-    protected function getTemplateService()
+    protected function getTemplateHandler()
     {
-        return $this->get('wizin_simple_cms.template');
+        return $this->get('wizin_simple_cms.template_handler');
     }
 
     /**

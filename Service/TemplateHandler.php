@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Service
+ * TemplateHandler
  */
 namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
@@ -10,10 +10,10 @@ use Wizin\Bundle\BaseBundle\Service\Service;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
 /**
- * Class Template
+ * Class TemplateHandler
  * @package Wizin\Bundle\SimpleCmsBundle\Service
  */
-class Template extends Service
+class TemplateHandler extends Service
 {
     /**
      * regex index for placeholder
