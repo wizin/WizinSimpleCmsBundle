@@ -24,7 +24,7 @@ class FrontController extends Controller
     {
         $pathInfo = $this->getRequest()->getPathInfo();
         // retrieve Content instance by $pathInfo
-        $content = $this->getContentManager()->getContentRepository()->retrieveEnableContent($pathInfo);
+        $content = $this->getClassLoader()->getContentRepository()->retrieveEnableContent($pathInfo);
         if (is_null($content)) {
             // invalid url
             throw new NotFoundHttpException();

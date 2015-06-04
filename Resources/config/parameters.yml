@@ -1,6 +1,6 @@
 parameters:
     wizin_simple_cms.service.template_handler.class: "Wizin\Bundle\SimpleCmsBundle\Service\TemplateHandler"
-    wizin_simple_cms.service.content_manager.class: "Wizin\Bundle\SimpleCmsBundle\Service\ContentManager"
+    wizin_simple_cms.service.class_loader.class: "Wizin\Bundle\SimpleCmsBundle\Service\ClassLoader"
     wizin_simple_cms.event.filter_controller_listener.class: "Wizin\Bundle\SimpleCmsBundle\Event\FilterControllerListener"
     wizin_simple_cms.left_delimiter: "<{"
     wizin_simple_cms.right_delimiter: "}>"
