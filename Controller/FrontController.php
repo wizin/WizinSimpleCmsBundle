@@ -3,7 +3,6 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
@@ -29,11 +28,7 @@ class FrontController extends Controller
             // invalid url
             throw new NotFoundHttpException();
         }
-        // create response
-        $response = new Response();
-        $responseContent = $this->getTemplateHandler()->generateResponseContent($content);
-        $response->setContent($responseContent);
 
-        return $response;
+        return $this->sendContent($content);
     }
 }

@@ -4,7 +4,9 @@
  */
 namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Wizin\Bundle\BaseBundle\Controller\Controller as BaseController;
+use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
 /**
  * Class Controller
@@ -13,6 +15,19 @@ use Wizin\Bundle\BaseBundle\Controller\Controller as BaseController;
  */
 class Controller extends BaseController
 {
+    /**
+     * @param Content $content
+     * @return Response
+     */
+    protected function sendContent(Content $content)
+    {
+        $response = new Response();
+        $responseContent = $this->getTemplateHandler()->generateResponseContent($content);
+        $response->setContent($responseContent);
+
+        return $response;
+    }
+
     /**
      * @return \Wizin\Bundle\SimpleCmsBundle\Service\TemplateHandler
      */
