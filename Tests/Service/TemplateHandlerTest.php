@@ -215,6 +215,67 @@ class TemplateHandlerTest extends ServiceTestCase
     }
 
     /**
+     * @test
+     * @dataProvider getTemplateCacheProvider
+     */
+    public function getTemplateCache(Content $content, $expected)
+    {
+        $service = $this->getService();
+        $filesystem = new Filesystem();
+        $cache = static::$kernel->getCacheDir() . '/' .  $service::CACHE_DIR_NAME . '/' .$content->getId() . '.' .$expected['suffix'] .'.html.twig';
+        $this->assertFalse($filesystem->exists($cache));
+        $templateCache = $service->getTemplateCache($content);
+        $this->assertEquals($cache, $templateCache);
+        $this->assertTrue($filesystem->exists($cache));
+    }
+
+    /**
+     * data provider for $this->getTemplateCache()
+     *
+     * @return array
+     */
+    public function getTemplateCacheProvider()
+    {
+        $data = [];
+        $title = 'test page';
+        $body = '<h1>Test</h1>';
+        $testContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
+            ->setId('00000000-0000-0000-0000-000000000001')
+            ->setPathInfo('/test')
+            ->setTitle($title)
+            ->setParameters(['body' => $body])
+            ->setTemplateFile('default.html.twig')
+        ;
+        $seed = $testContent->getId() . $testContent->getPathInfo() . $testContent->getTitle()
+            . $testContent->getTemplateFile() . json_encode($testContent->getParameters());
+        if (function_exists('hash')) {
+            $suffix = hash('sha256', $seed);
+        } else {
+            $suffix = sha1($seed);
+        }
+        $data[] = [$testContent, ['suffix' => $suffix]];
+        $title = 'dummy page';
+        $body = '<h1>Dummy</h1>';
+        $dummyContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
+            ->setId('00000000-0000-0000-0000-000000000002')
+            ->setPathInfo('/dummy')
+            ->setTitle($title)
+            ->setParameters(['body' => $body])
+            ->setTemplateFile('default.html.twig')
+        ;
+        $seed = $dummyContent->getId() . $dummyContent->getPathInfo() . $dummyContent->getTitle()
+            . $dummyContent->getTemplateFile() . json_encode($dummyContent->getParameters());
+        if (function_exists('hash')) {
+            $suffix = hash('sha256', $seed);
+        } else {
+            $suffix = sha1($seed);
+        }
+        $data[] = [$dummyContent, ['suffix' => $suffix]];
+
+        return $data;
+    }
+
+    /**
      * @return null
      */
     public function tearDown()

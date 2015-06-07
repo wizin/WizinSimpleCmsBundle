@@ -159,9 +159,9 @@ class TemplateHandler extends Service
 
     /**
      * @param Content $content
-     * @return string $responseContent content string for response
+     * @return string
      */
-    public function generateResponseContent(Content $content)
+    public function getTemplateCache(Content $content)
     {
         if ($this->container->get('kernel')->isDebug()) {
             $this->removeCache($content);
@@ -169,14 +169,23 @@ class TemplateHandler extends Service
         $filesystem = new Filesystem();
         $cachePath = $this->getCachePath($content);
         if ($filesystem->exists($cachePath) === false) {
-            $source = $this->getTemplateSource($content->getTemplateFile());
-            $source = $this->replaceSource($source, $content->getParameters());
-            $filesystem->dumpFile($cachePath, $source);
+            $this->generateCache($content, $cachePath);
         }
+
+        return $cachePath;
+    }
+
+    /**
+     * @param Content $content
+     * @return string $responseContent content string for response
+     */
+    public function generateResponseContent(Content $content)
+    {
+        $cache = $this->getTemplateCache($content);
         $twig = $this->container->get('twig');
-        $twig->getLoader()->addPath(dirname($cachePath));
+        $twig->getLoader()->addPath(dirname($cache));
         $responseContent = $twig->render(
-            basename($cachePath),
+            basename($cache),
             [
                 'title' => $content->getTitle(),
             ]
@@ -279,5 +288,17 @@ class TemplateHandler extends Service
             $suffix = sha1($seed);
         }
         return $this->getCacheDir() . '/' .$content->getId() . '.' .$suffix . '.html.twig';
+    }
+
+    /**
+     * @param Content $content
+     * @param string $cachePath
+     */
+    protected function generateCache(Content $content, $cachePath)
+    {
+        $filesystem = new Filesystem();
+        $source = $this->getTemplateSource($content->getTemplateFile());
+        $source = $this->replaceSource($source, $content->getParameters());
+        $filesystem->dumpFile($cachePath, $source);
     }
 }
