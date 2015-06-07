@@ -21,11 +21,15 @@ class Controller extends BaseController
      */
     protected function sendContent(Content $content)
     {
-        $response = new Response();
-        $responseContent = $this->getTemplateHandler()->generateResponseContent($content);
-        $response->setContent($responseContent);
+        $cache = $this->getTemplateHandler()->getTemplateCache($content);
+        $this->container->get('twig.loader')->addPath(dirname($cache));
 
-        return $response;
+        return $this->render(
+            basename($cache),
+            [
+                'title' => $content->getTitle(),
+            ]
+        );
     }
 
     /**
