@@ -110,51 +110,6 @@ class TemplateHandlerTest extends ServiceTestCase
 
     /**
      * @test
-     * @dataProvider generateResponseContentProvider
-     */
-    public function generateResponseContent(Content $content, $expected)
-    {
-        $this->getContainer()->enterScope('request');
-        $this->getContainer()->set('request', new Request(), 'request');
-        $responseContent = $this->getService()->generateResponseContent($content);
-        $this->assertContains('<title>' .$expected['title'] .'</title>', $responseContent);
-        $this->assertContains($expected['body'], $responseContent);
-    }
-
-    /**
-     * data provider for $this->generateResponseContent()
-     *
-     * @return array
-     */
-    public function generateResponseContentProvider()
-    {
-        $data = [];
-        $title = 'test page';
-        $body = '<h1>Test</h1>';
-        $testContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
-            ->setId('00000000-0000-0000-0000-000000000001')
-            ->setPathInfo('/test')
-            ->setTitle($title)
-            ->setParameters(['body' => $body])
-            ->setTemplateFile('default.html.twig')
-        ;
-        $data[] = [$testContent, ['title' => $title, 'body' => $body]];
-        $title = 'dummy page';
-        $body = '<h1>Dummy</h1>';
-        $dummyContent = (new \Wizin\Bundle\SimpleCmsBundle\Entity\Content())
-            ->setId('00000000-0000-0000-0000-000000000002')
-            ->setPathInfo('/dummy')
-            ->setTitle($title)
-            ->setParameters(['body' => $body])
-            ->setTemplateFile('default.html.twig')
-        ;
-        $data[] = [$dummyContent, ['title' => $title, 'body' => $body]];
-
-        return $data;
-    }
-
-    /**
-     * @test
      * @dataProvider removeCacheProvider
      */
     public function removeCache(Content $content, $expected)

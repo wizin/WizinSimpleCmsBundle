@@ -177,25 +177,6 @@ class TemplateHandler extends Service
 
     /**
      * @param Content $content
-     * @return string $responseContent content string for response
-     */
-    public function generateResponseContent(Content $content)
-    {
-        $cache = $this->getTemplateCache($content);
-        $twig = $this->container->get('twig');
-        $twig->getLoader()->addPath(dirname($cache));
-        $responseContent = $twig->render(
-            basename($cache),
-            [
-                'title' => $content->getTitle(),
-            ]
-        );
-
-        return $responseContent;
-    }
-
-    /**
-     * @param Content $content
      */
     public function removeCache(Content $content)
     {
