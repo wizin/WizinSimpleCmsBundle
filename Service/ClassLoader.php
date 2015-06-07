@@ -5,6 +5,7 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
 use Wizin\Bundle\BaseBundle\Service\Service;
+use Wizin\Bundle\SimpleCmsBundle\Form\ContentType;
 
 /**
  * Class ClassLoader
@@ -18,5 +19,13 @@ class ClassLoader extends Service
     public function getContentRepository()
     {
         return $this->getEntityManager()->getRepository('WizinSimpleCmsBundle:Content');
+    }
+
+    /**
+     * @return \Wizin\Bundle\SimpleCmsBundle\Form\ContentType
+     */
+    public function getContentFormType()
+    {
+        return new ContentType();
     }
 }

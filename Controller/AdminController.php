@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
-use Wizin\Bundle\SimpleCmsBundle\Form\ContentType;
 
 /**
  * Class AdminController
@@ -134,8 +133,9 @@ class AdminController extends Controller
         if (is_null($templateFile) === false) {
             $content->setTemplateFile($templateFile);
         }
+        $contentFormType = $this->getClassLoader()->getContentFormType();
 
-        return  $this->createForm(new ContentType(), $content);
+        return  $this->createForm(new $contentFormType(), $content);
     }
 
     /**
