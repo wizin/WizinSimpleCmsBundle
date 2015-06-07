@@ -66,7 +66,7 @@ abstract class AbstractContent
      * Set pathInfo
      *
      * @param string $pathInfo
-     * @return Content
+     * @return AbstractContent
      */
     public function setPathInfo($pathInfo)
     {
@@ -89,7 +89,7 @@ abstract class AbstractContent
      * Set title
      *
      * @param string $title
-     * @return Content
+     * @return AbstractContent
      */
     public function setTitle($title)
     {
@@ -112,7 +112,7 @@ abstract class AbstractContent
      * Set parameters
      *
      * @param array $parameters
-     * @return Content
+     * @return AbstractContent
      */
     public function setParameters(array $parameters)
     {
@@ -140,7 +140,7 @@ abstract class AbstractContent
      * Set templateFile
      *
      * @param string $templateFile
-     * @return Content
+     * @return AbstractContent
      */
     public function setTemplateFile($templateFile)
     {
@@ -163,7 +163,7 @@ abstract class AbstractContent
      * Set active
      *
      * @param boolean $active
-     * @return Content
+     * @return AbstractContent
      */
     public function setActive($active)
     {
