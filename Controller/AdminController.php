@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
+use Wizin\Bundle\SimpleCmsBundle\Exception\DuplicateContentException;
 
 /**
  * Class AdminController
@@ -148,16 +149,14 @@ class AdminController extends Controller
         $result = false;
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
-            if ($this->getClassLoader()->getContentRepository()->isDuplicated($content) === false) {
-                // persist entity
-                $this->getEntityManager()->persist($content);
-                $this->getEntityManager()->flush();
-                // remove old cache
-                $this->getTemplateHandler()->removeCache($content);
-                $result = true;
-            } else {
+            try {
+                if ($this->getContentManager()->save($content) === true) {
+                    $this->getTemplateHandler()->removeCache($content);
+                    $result = true;
+                }
+            } catch (DuplicateContentException $exception) {
                 $form->addError(new FormError(
-                        $this->container->getParameter('wizin_simple_cms.message.error.duplicate')));
+                    $this->container->getParameter('wizin_simple_cms.message.error.duplicate')));
             }
         }
 
