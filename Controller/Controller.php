@@ -47,5 +47,13 @@ class Controller extends BaseController
     {
         return $this->get('wizin_simple_cms.class_loader');
     }
+
+    /**
+     * @return \Wizin\Bundle\SimpleCmsBundle\Service\ContentManager
+     */
+    protected function getContentManager()
+    {
+        return $this->get('wizin_simple_cms.content_manager');
+    }
 }
 
