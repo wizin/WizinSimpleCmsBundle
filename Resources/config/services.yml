@@ -10,6 +10,11 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
 
+    wizin_simple_cms.content_manager:
+        class: "%wizin_simple_cms.service.content_manager.class%"
+        calls:
+            - [setContainer, ["@service_container"]]
+
     wizin_simple_cms.content_converter:
         class: "%wizin_simple_cms.service.content_converter.class%"
         calls:
