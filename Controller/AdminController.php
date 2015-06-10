@@ -55,7 +55,7 @@ class AdminController extends Controller
         $content = new $contentEntity();
         $form = $this->createContentForm($content, $templateFile);
         if ($this->getRequest()->isMethod('POST')) {
-            if ($this->save($form, $content)) {
+            if ($this->save($content, $form)) {
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
@@ -81,7 +81,7 @@ class AdminController extends Controller
         }
         $form = $this->createContentForm($content, $content->getTemplateFile());
         if ($this->getRequest()->isMethod('POST')) {
-            if ($this->save($form, $content)) {
+            if ($this->save($content, $form)) {
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
@@ -140,11 +140,11 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Form $form
      * @param Content $content
+     * @param Form $form
      * @return bool
      */
-    protected function save(Form $form, Content $content)
+    protected function save(Content $content, Form $form)
     {
         $result = false;
         $form->handleRequest($this->getRequest());
