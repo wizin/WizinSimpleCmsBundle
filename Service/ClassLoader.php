@@ -22,6 +22,14 @@ class ClassLoader extends Service
     }
 
     /**
+     * @return \Wizin\Bundle\SimpleCmsBundle\Repository\DraftContentRepository
+     */
+    public function getDraftContentRepository()
+    {
+        return $this->getEntityManager()->getRepository('WizinSimpleCmsBundle:DraftContent');
+    }
+
+    /**
      * @return \Wizin\Bundle\SimpleCmsBundle\Form\ContentType
      */
     public function getContentFormType()
