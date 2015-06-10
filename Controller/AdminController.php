@@ -52,9 +52,9 @@ class AdminController extends Controller
         if ($templateFile === '') {
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
-        $contentEntity = $this->getClassLoader()->getContentRepository()->getClassName();
+        $entityClass = $this->getClassLoader()->getContentRepository()->getClassName();
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
-        $content = new $contentEntity();
+        $content = new $entityClass();
         $form = $this->createContentForm($content, $templateFile);
         if ($this->getRequest()->isMethod('POST')) {
             if ($this->save($content, $form)) {
