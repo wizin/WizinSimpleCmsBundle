@@ -21,6 +21,8 @@ class ContentType extends AbstractType
         $builder->add('parameters', 'collection', ['type' => 'textarea', 'required' => false]);
         $builder->add('templateFile', 'text', ['read_only' => true]);
         $builder->add('active', 'checkbox', ['required' => false]);
+        $builder->add('save', 'submit', ['validation_groups' => false]);
+        $builder->add('draft', 'submit', ['validation_groups' => false]);
     }
 
     /**
