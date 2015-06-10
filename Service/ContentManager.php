@@ -21,12 +21,26 @@ class ContentManager extends Service
      */
     public function save(Content $content, $isDraft = false)
     {
-        // duplicate check
-        if ($this->getClassLoader()->getContentRepository()->isDuplicated($content)) {
-            throw new DuplicateContentException();
+        if ($isDraft) {
+            // convert Content -> DraftContent
+            $draft = $this->getContentConverter()->convertToDraft($content);
+            // persist DraftContent entity
+            $this->getEntityManager()->persist($draft);
+            // refresh Content entity
+            $this->getEntityManager()->refresh($content);
+        } else {
+            // duplicate check
+            if ($this->getClassLoader()->getContentRepository()->isDuplicated($content)) {
+                throw new DuplicateContentException();
+            }
+            // persist Content entity
+            $this->getEntityManager()->persist($content);
+            // remove draft
+            $draft = $this->getClassLoader()->getDraftContentRepository()->findOneBy(['contentId' => $content->getId()]);
+            if (is_null($draft) === false) {
+                $this->getEntityManager()->remove($draft);
+            }
         }
-        // persist entity
-        $this->getEntityManager()->persist($content);
         $this->getEntityManager()->flush();
 
         return true;
@@ -38,6 +52,14 @@ class ContentManager extends Service
     protected function getClassLoader()
     {
         return $this->container->get('wizin_simple_cms.class_loader');
+    }
+
+    /**
+     * @return \Wizin\Bundle\SimpleCmsBundle\Service\ContentConverter
+     */
+    protected function getContentConverter()
+    {
+        return $this->container->get('wizin_simple_cms.content_converter');
     }
 }
 
