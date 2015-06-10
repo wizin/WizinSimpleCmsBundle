@@ -7,7 +7,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
+use Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface;
 use Wizin\Bundle\SimpleCmsBundle\Exception\DuplicateContentException;
 
 /**
@@ -31,6 +31,7 @@ class AdminController extends Controller
      */
     public function listAction()
     {
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content[] $contents */
         $contents = $this->getClassLoader()->getContentRepository()->findAll();
         $baseUrl = $this->getBaseUrl();
 
@@ -52,6 +53,7 @@ class AdminController extends Controller
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
         $contentEntity = $this->getClassLoader()->getContentRepository()->getClassName();
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
         $content = new $contentEntity();
         $form = $this->createContentForm($content, $templateFile);
         if ($this->getRequest()->isMethod('POST')) {
@@ -104,7 +106,8 @@ class AdminController extends Controller
      */
     public function previewAction($id)
     {
-        // retrieve Content instance by $id
+        // retrieve content instance by $id
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
         $content = $this->getClassLoader()->getContentRepository()->find($id);
         if (is_null($content)) {
             // invalid url
@@ -115,11 +118,11 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Content $content
+     * @param ContentInterface $content
      * @param null $templateFile
      * @return \Symfony\Component\Form\Form
      */
-    protected function createContentForm(Content $content, $templateFile = null)
+    protected function createContentForm(ContentInterface $content, $templateFile = null)
     {
         $hash = [];
         $parameters = (array) $content->getParameters();
@@ -140,17 +143,18 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Content $content
+     * @param ContentInterface $content
      * @param Form $form
      * @return bool
      */
-    protected function save(Content $content, Form $form)
+    protected function save(ContentInterface $content, Form $form)
     {
         $result = false;
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             try {
-                if ($this->getContentManager()->save($content) === true) {
+                $isDraft = $form->get('draft')->isClicked();
+                if ($this->getContentManager()->save($content, $isDraft) === true) {
                     $this->getTemplateHandler()->removeCache($content);
                     $result = true;
                 }

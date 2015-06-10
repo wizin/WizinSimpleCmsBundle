@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass="Wizin\Bundle\SimpleCmsBundle\Repository\ContentRepository")
  */
-class Content extends AbstractContent
+class Content extends AbstractContent implements ContentInterface
 {
     /**
      * @var string

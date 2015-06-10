@@ -16,9 +16,10 @@ class ContentManager extends Service
 {
     /**
      * @param Content $content
+     * @param bool isDraft
      * @return bool
      */
-    public function save(Content $content)
+    public function save(Content $content, $isDraft = false)
     {
         // duplicate check
         if ($this->getClassLoader()->getContentRepository()->isDuplicated($content)) {
