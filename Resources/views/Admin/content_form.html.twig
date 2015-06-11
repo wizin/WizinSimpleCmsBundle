@@ -43,6 +43,10 @@
 
 <div>
     {{ form_widget(form.save) }}
-    {{ form_widget(form.draft) }}
+    {%- if form.id.vars.value is not empty -%}
+        {{ form_widget(form.draft) }}
+    {%- endif -%}
 </div>
-{{ form_end(form) }}
+{{ form_widget(form._token) }}
+{#- don't render unrendered fields -#}
+{{ form_end(form, {'render_rest': false}) }}
