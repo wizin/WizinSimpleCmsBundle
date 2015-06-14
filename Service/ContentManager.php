@@ -4,6 +4,7 @@
  */
 namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
+use Doctrine\ORM\Query;
 use Wizin\Bundle\BaseBundle\Service\Service;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 use Wizin\Bundle\SimpleCmsBundle\Exception\DuplicateContentException;
@@ -19,7 +20,18 @@ class ContentManager extends Service
      */
     public function retrieveContentsList()
     {
-        $contentsList = $this->getClassLoader()->getContentRepository()->findAll();
+        $contentsList = [];
+        $contents = $this->getClassLoader()->getContentRepository()->findAll();
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content[] $contents */
+        foreach ($contents as $content) {
+            /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent $draftContent */
+            $draftContent = $this->getClassLoader()->getDraftContentRepository()
+                ->findOneBy(['contentId' => $content->getId()]);
+            $contentsList[] = [
+                'content' => $content,
+                'draft' => $draftContent,
+            ];
+        }
 
         return $contentsList;
     }

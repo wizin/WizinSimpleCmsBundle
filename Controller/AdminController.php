@@ -31,10 +31,10 @@ class AdminController extends Controller
      */
     public function listAction()
     {
-        $contents = $this->getContentManager()->retrieveContentsList();
+        $contentsList = $this->getContentManager()->retrieveContentsList();
         $baseUrl = $this->getBaseUrl();
 
-        return ['contents' => $contents, 'baseUrl' => $baseUrl];
+        return ['contentsList' => $contentsList, 'baseUrl' => $baseUrl];
     }
 
     /**

@@ -20,26 +20,30 @@
         </tr>
         </thead>
         <tbody>
-        {%- for content in contents -%}
+        {%- for contents in contentsList -%}
             <tr>
-                <td>{{ content.title }}</td>
-                <td>{{ content.pathInfo }}</td>
-                <td>{{ content.templateFile }}</td>
+                <td>{{ contents.content.title }}</td>
+                <td>{{ contents.content.pathInfo }}</td>
+                <td>{{ contents.content.templateFile }}</td>
                 <td>
-                    {%- if content.active == true -%}
+                    {%- if contents.content.active == true -%}
                         true
                     {%- else -%}
                         false
                     {%- endif -%}
                 </td>
-                <td>{{ content.createdAt|date('Y-m-d H:i') }}</td>
-                <td>{{ content.updatedAt|date('Y-m-d H:i') }}</td>
+                <td>{{ contents.content.createdAt|date('Y-m-d H:i') }}</td>
+                <td>{{ contents.content.updatedAt|date('Y-m-d H:i') }}</td>
                 <td>
-                    <a class="wizin-simple-cms__link" href="{{ baseUrl }}{{ content.pathInfo }}">view</a>
+                    <a class="wizin-simple-cms__link" href="{{ baseUrl }}{{ contents.content.pathInfo }}">view</a>
                     &nbsp; / &nbsp;
-                    <a href="{{ path('wizin_simple_cms_admin_edit', {'id': content.id}) }}">edit</a>
+                    <a href="{{ path('wizin_simple_cms_admin_edit', {'id': contents.content.id}) }}">edit</a>
                     &nbsp; / &nbsp;
-                    <a class="wizin-simple-cms__link" href="{{ path('wizin_simple_cms_admin_preview', {'id': content.id}) }}">preview</a>
+                    <a class="wizin-simple-cms__link" href="{{ path('wizin_simple_cms_admin_preview', {'id': contents.content.id}) }}">preview</a>
+                    {%- if contents.draft is not null -%}
+                        &nbsp; / &nbsp;
+                        <a href="{{ path('wizin_simple_cms_admin_edit', {'id': contents.content.id}) }}">draft</a>
+                    {%- endif -%}
                 </td>
             </tr>
         {%- endfor -%}
