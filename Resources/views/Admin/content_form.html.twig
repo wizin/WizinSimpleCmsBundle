@@ -25,18 +25,28 @@
     {{ form_errors(form.active) }}
     {{ form_widget(form.active) }}
 </div>
+
 <hr/>
-    {#- parameters -#}
-    {%- for parameter in form.parameters -%}
-        <div>
-            {%- if options[parameter.vars.name].label is defined -%}
-                {{ form_label (parameter, null, options[parameter.vars.name].label) }}
-            {%- else -%}
-                {{ form_label (parameter) }}
-            {%- endif -%}
-            {{ form_errors(parameter) }}
-            {{ form_widget(parameter) }}
-        </div>
-    {%- endfor -%}
-<input type="submit" />
-{{ form_end(form) }}
+
+{#- parameters -#}
+{%- for parameter in form.parameters -%}
+    <div>
+        {%- if options[parameter.vars.name].label is defined -%}
+            {{ form_label (parameter, null, options[parameter.vars.name].label) }}
+        {%- else -%}
+            {{ form_label (parameter) }}
+        {%- endif -%}
+        {{ form_errors(parameter) }}
+        {{ form_widget(parameter) }}
+    </div>
+{%- endfor -%}
+
+<div>
+    {{ form_widget(form.save) }}
+    {%- if form.id.vars.value is not empty -%}
+        {{ form_widget(form.draft) }}
+    {%- endif -%}
+</div>
+{{ form_widget(form._token) }}
+{#- don't render unrendered fields -#}
+{{ form_end(form, {'render_rest': false}) }}

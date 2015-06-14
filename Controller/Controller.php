@@ -6,7 +6,7 @@ namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Wizin\Bundle\BaseBundle\Controller\Controller as BaseController;
-use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
+use Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface;
 
 /**
  * Class Controller
@@ -16,10 +16,10 @@ use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 class Controller extends BaseController
 {
     /**
-     * @param Content $content
+     * @param ContentInterface $content
      * @return Response
      */
-    protected function sendContent(Content $content)
+    protected function sendContent(ContentInterface $content)
     {
         $cache = $this->getTemplateHandler()->getTemplateCache($content);
         $this->container->get('twig.loader')->addPath(dirname($cache));

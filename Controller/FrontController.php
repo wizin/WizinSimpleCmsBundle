@@ -22,7 +22,8 @@ class FrontController extends Controller
     public function showAction($path)
     {
         $pathInfo = $this->getRequest()->getPathInfo();
-        // retrieve Content instance by $pathInfo
+        // retrieve content instance by $pathInfo
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
         $content = $this->getClassLoader()->getContentRepository()->retrieveEnableContent($pathInfo);
         if (is_null($content)) {
             // invalid url
