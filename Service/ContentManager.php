@@ -15,6 +15,16 @@ use Wizin\Bundle\SimpleCmsBundle\Exception\DuplicateContentException;
 class ContentManager extends Service
 {
     /**
+     * @return array
+     */
+    public function retrieveContentsList()
+    {
+        $contentsList = $this->getClassLoader()->getContentRepository()->findAll();
+
+        return $contentsList;
+    }
+
+    /**
      * @param Content $content
      * @return bool
      */

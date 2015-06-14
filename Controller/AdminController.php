@@ -31,7 +31,7 @@ class AdminController extends Controller
      */
     public function listAction()
     {
-        $contents = $this->getClassLoader()->getContentRepository()->findAll();
+        $contents = $this->getContentManager()->retrieveContentsList();
         $baseUrl = $this->getBaseUrl();
 
         return ['contents' => $contents, 'baseUrl' => $baseUrl];
