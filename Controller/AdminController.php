@@ -107,6 +107,22 @@ class AdminController extends Controller
     }
 
     /**
+     * @Route(
+     *   "/draftEdit/{id}",
+     *   name="wizin_simple_cms_admin_draft_edit",
+     * )
+     * @Template()
+     */
+    public function draftEditAction($id)
+    {
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent $draft */
+        $draft = $this->getClassLoader()->getDraftContentRepository()->find($id);
+        $content = $this->getContentConverter()->convertFromDraft($draft);
+
+        return $this->edit($content);
+    }
+
+    /**
      * @param ContentInterface $content
      * @param null $templateFile
      * @return \Symfony\Component\Form\Form

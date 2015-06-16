@@ -55,5 +55,13 @@ class Controller extends BaseController
     {
         return $this->get('wizin_simple_cms.content_manager');
     }
+
+    /**
+     * @return \Wizin\Bundle\SimpleCmsBundle\Service\ContentConverter
+     */
+    protected function getContentConverter()
+    {
+        return $this->get('wizin_simple_cms.content_converter');
+    }
 }
 

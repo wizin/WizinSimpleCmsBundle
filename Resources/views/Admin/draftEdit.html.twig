@@ -1,0 +1,10 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}WizinSimpleCmsBundle:Admin{% endblock %}
+
+{% block body %}
+    <a href="{{ path('wizin_simple_cms_admin_index') }}">Back</a>
+    <hr/>
+    <h1>Edit draft</h1>
+    {{ include("WizinSimpleCmsBundle:Admin:content_form.html.twig") }}
+{% endblock %}
