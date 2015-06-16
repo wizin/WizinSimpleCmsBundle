@@ -83,7 +83,7 @@ class AdminController extends Controller
 
     /**
      * @Route("/selectTemplateFile", name="wizin_simple_cms_admin_select_template_file")
-     * @Template("WizinSimpleCmsBundle:Admin:select_template_file.html.twig")
+     * @Template()
      */
     public function selectTemplateFileAction()
     {
