@@ -36,7 +36,7 @@ class ContentRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('content')
-            ->from('\Wizin\Bundle\SimpleCmsBundle\Entity\Content', 'content')
+            ->from($this->getClassName(), 'content')
             ->where('content.pathInfo = :pathInfo')
             ->setParameter('pathInfo', $content->getPathInfo())
         ;
