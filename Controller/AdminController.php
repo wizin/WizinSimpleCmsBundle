@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface;
+use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 use Wizin\Bundle\SimpleCmsBundle\Exception\DuplicateContentException;
 
 /**
@@ -76,19 +77,8 @@ class AdminController extends Controller
     {
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
         $content = $this->getClassLoader()->getContentRepository()->find($id);
-        if (is_null($content)) {
-            // invalid url
-            throw new NotFoundHttpException();
-        }
-        $form = $this->createContentForm($content, $content->getTemplateFile());
-        if ($this->getRequest()->isMethod('POST')) {
-            if ($this->save($content, $form)) {
-                return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
-            }
-        }
-        $options = $this->getTemplateHandler()->getOptions($content->getTemplateFile());
 
-        return ['form' => $form->createView(), 'options' => $options];
+        return $this->edit($content);
     }
 
     /**
@@ -139,6 +129,28 @@ class AdminController extends Controller
         $contentFormType = $this->getClassLoader()->getContentFormType();
 
         return  $this->createForm(new $contentFormType(), $content);
+    }
+
+    /**
+     * @param Content $content
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function edit(Content $content)
+    {
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
+        if (is_null($content)) {
+            // invalid url
+            throw new NotFoundHttpException();
+        }
+        $form = $this->createContentForm($content, $content->getTemplateFile());
+        if ($this->getRequest()->isMethod('POST')) {
+            if ($this->save($content, $form)) {
+                return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
+            }
+        }
+        $options = $this->getTemplateHandler()->getOptions($content->getTemplateFile());
+
+        return ['form' => $form->createView(), 'options' => $options];
     }
 
     /**
