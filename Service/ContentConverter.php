@@ -6,6 +6,8 @@ namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
 use Wizin\Bundle\BaseBundle\Service\Service;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
+use Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent;
+use Wizin\Bundle\SimpleCmsBundle\Exception\OrphanDraftException;
 
 /**
  * Class ContentConverter
@@ -36,6 +38,29 @@ class ContentConverter extends Service
         ;
 
         return $draft;
+    }
+
+    /**
+     * @param DraftContent $draft
+     * @return Content
+     */
+    public function convertFromDraft(DraftContent $draft)
+    {
+        $contentRepository = $this->getClassLoader()->getContentRepository();
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
+        $content = $contentRepository->find($draft->getContentId());
+        if (is_null($content)) {
+            throw new OrphanDraftException();
+        }
+        $content
+            ->setPathInfo($draft->getPathInfo())
+            ->setTitle($draft->getTitle())
+            ->setParameters($draft->getParameters())
+            ->setTemplateFile($draft->getTemplateFile())
+            ->setActive($draft->getActive())
+        ;
+
+        return $content;
     }
 
     /**
