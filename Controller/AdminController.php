@@ -123,6 +123,22 @@ class AdminController extends Controller
     }
 
     /**
+     * @Route("/draftPreview/{id}", name="wizin_simple_cms_admin_draft_preview")
+     */
+    public function draftPreviewAction($id)
+    {
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent $draft */
+        $draft = $this->getClassLoader()->getDraftContentRepository()->find($id);
+        $content = $this->getContentConverter()->convertFromDraft($draft);
+        if (is_null($content)) {
+            // invalid url
+            throw new NotFoundHttpException();
+        }
+
+        return $this->sendContent($content);
+    }
+
+    /**
      * @param ContentInterface $content
      * @param null $templateFile
      * @return \Symfony\Component\Form\Form

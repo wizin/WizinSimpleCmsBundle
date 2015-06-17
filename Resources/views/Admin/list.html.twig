@@ -43,6 +43,8 @@
                     {%- if contents.draft is not null -%}
                         &nbsp; / &nbsp;
                         <a href="{{ path('wizin_simple_cms_admin_draft_edit', {'id': contents.draft.id}) }}">draft edit</a>
+                        &nbsp; / &nbsp;
+                        <a class="wizin-simple-cms__link" href="{{ path('wizin_simple_cms_admin_draft_preview', {'id': contents.draft.id}) }}">draft preview</a>
                     {%- endif -%}
                 </td>
             </tr>
