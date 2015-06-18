@@ -47,6 +47,7 @@ class TemplateHandlerTest extends ServiceTestCase
             [
                 dirname(__DIR__) . '/Resources/templates/',
                 [
+                    'default.html.twig',
                     'dir/test.html.twig',
                     'test.html.twig',
                 ]
