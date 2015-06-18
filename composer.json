@@ -17,6 +17,11 @@
   "autoload": {
     "psr-0": { "Wizin\\Bundle\\SimpleCmsBundle": "" }
   },
+  "extra": {
+    "branch-alias": {
+      "dev-feature/0.1": "0.1.x-dev"
+    }
+  },
   "target-dir": "Wizin/Bundle/SimpleCmsBundle",
   "minimum-stability": "dev"
 }
