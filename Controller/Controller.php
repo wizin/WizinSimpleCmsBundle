@@ -25,14 +25,9 @@ class Controller extends BaseController
     {
         // dispatch InjectVariablesEvent
         $event = new InjectVariablesEvent();
-        $key = Event::ON_INJECT_VARIABLES;
-        foreach ($content->getUniqueColumns() as $column) {
-            $getter = 'get' .ucfirst($column);
-            $key .= '.' .$content->$getter();
-        }
         /** @var \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher $dispatcher */
         $dispatcher = $this->container->get('event_dispatcher');
-        $dispatcher->dispatch($key, $event);
+        $dispatcher->dispatch(Event::ON_INJECT_VARIABLES, $event);
         // render
         $cache = $this->getTemplateHandler()->getTemplateCache($content);
         $this->container->get('twig.loader')->addPath(dirname($cache));

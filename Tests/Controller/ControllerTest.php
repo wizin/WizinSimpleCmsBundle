@@ -22,7 +22,7 @@ class ControllerTest extends FunctionalTestCase
         // set event
         $dispatcher = $this->getContainer()->get('event_dispatcher');
         $dispatcher->addListener(
-            Event::ON_INJECT_VARIABLES .'.' .$content->getPathInfo(),
+            Event::ON_INJECT_VARIABLES,
             function (InjectVariablesEvent $event) use ($variables) {
                 $event->setVariables($variables);
             }
