@@ -42,7 +42,7 @@ class ContentConverterTest extends ServiceTestCase
         $this->getContainer()->set('wizin_simple_cms.class_loader', $loader);
         // execute test
         $draft = $this->getService()->convertToDraft($content);
-        $this->assertInstanceOf('\Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent', $draft);
+        $this->assertInstanceOf('\Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface', $draft);
         $this->assertSame($content->getId(), $draft->getContentId());
         $this->assertSame($content->getPathInfo(), $draft->getPathInfo());
         $this->assertSame($content->getTitle(), $draft->getTitle());
@@ -114,7 +114,7 @@ class ContentConverterTest extends ServiceTestCase
             $this->setExpectedException('\Wizin\Bundle\SimpleCmsBundle\Exception\OrphanDraftException');
         }
         $result = $this->getService()->convertFromDraft($draftContent);
-        $this->assertInstanceOf('\Wizin\Bundle\SimpleCmsBundle\Entity\Content', $result);
+        $this->assertInstanceOf('\Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface', $result);
         $this->assertSame($draftContent->getPathInfo(), $result->getPathInfo());
         $this->assertSame($draftContent->getTitle(), $result->getTitle());
         $this->assertSame($draftContent->getTemplateFile(), $result->getTemplateFile());

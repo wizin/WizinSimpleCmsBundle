@@ -5,8 +5,8 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
 use Wizin\Bundle\BaseBundle\Service\Service;
-use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
-use Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent;
+use Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface;
+use Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface;
 use Wizin\Bundle\SimpleCmsBundle\Exception\OrphanDraftException;
 
 /**
@@ -16,13 +16,13 @@ use Wizin\Bundle\SimpleCmsBundle\Exception\OrphanDraftException;
 class ContentConverter extends Service
 {
     /**
-     * @param Content $content
-     * @return DraftContent $draft
+     * @param ContentInterface $content
+     * @return DraftContentInterface $draft
      */
-    public function convertToDraft(Content $content)
+    public function convertToDraft(ContentInterface $content)
     {
         $draftContentRepository = $this->getClassLoader()->getDraftContentRepository();
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent $draft */
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface $draft */
         $draft = $draftContentRepository->findOneBy(['contentId' => $content->getId()]);
         if (is_null($draft)) {
             $entityClass = $this->getClassLoader()->getDraftContentRepository()->getClassName();
@@ -41,13 +41,13 @@ class ContentConverter extends Service
     }
 
     /**
-     * @param DraftContent $draft
-     * @return Content
+     * @param DraftContentInterface $draft
+     * @return ContentInterface
      */
-    public function convertFromDraft(DraftContent $draft)
+    public function convertFromDraft(DraftContentInterface $draft)
     {
         $contentRepository = $this->getClassLoader()->getContentRepository();
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
         $content = $contentRepository->find($draft->getContentId());
         if (is_null($content)) {
             throw new OrphanDraftException();

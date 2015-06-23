@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface;
-use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 use Wizin\Bundle\SimpleCmsBundle\Exception\DuplicateContentException;
 
 /**
@@ -53,7 +52,7 @@ class AdminController extends Controller
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
         $entityClass = $this->getClassLoader()->getContentRepository()->getClassName();
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
         $content = new $entityClass();
         $form = $this->createContentForm($content, $templateFile);
         if ($this->getRequest()->isMethod('POST')) {
@@ -75,7 +74,7 @@ class AdminController extends Controller
      */
     public function editAction($id)
     {
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
         $content = $this->getClassLoader()->getContentRepository()->find($id);
 
         return $this->edit($content);
@@ -96,7 +95,7 @@ class AdminController extends Controller
     public function previewAction($id)
     {
         // retrieve content instance by $id
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
         $content = $this->getClassLoader()->getContentRepository()->find($id);
         if (is_null($content)) {
             // invalid url
@@ -115,7 +114,7 @@ class AdminController extends Controller
      */
     public function draftEditAction($id)
     {
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent $draft */
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface $draft */
         $draft = $this->getClassLoader()->getDraftContentRepository()->find($id);
         $content = $this->getContentConverter()->convertFromDraft($draft);
 
@@ -127,7 +126,7 @@ class AdminController extends Controller
      */
     public function draftPreviewAction($id)
     {
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContent $draft */
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface $draft */
         $draft = $this->getClassLoader()->getDraftContentRepository()->find($id);
         $content = $this->getContentConverter()->convertFromDraft($draft);
         if (is_null($content)) {
@@ -164,12 +163,11 @@ class AdminController extends Controller
     }
 
     /**
-     * @param Content $content
+     * @param null|ContentInterface $content
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function edit(Content $content)
+    public function edit(ContentInterface $content)
     {
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
         if (is_null($content)) {
             // invalid url
             throw new NotFoundHttpException();
