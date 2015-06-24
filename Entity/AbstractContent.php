@@ -17,11 +17,6 @@ abstract class AbstractContent
     use Timestampable;
 
     /**
-     * @var array
-     */
-    protected $uniqueColumns = ['pathInfo'];
-
-    /**
      * @var string
      *
      * @ORM\Column(name="path_info", type="string", length=255)
@@ -185,16 +180,6 @@ abstract class AbstractContent
     public function getActive()
     {
         return $this->active;
-    }
-
-    /**
-     * Get uniqueColumns
-     *
-     * @return array
-     */
-    public function getUniqueColumns()
-    {
-        return $this->uniqueColumns;
     }
 }
 

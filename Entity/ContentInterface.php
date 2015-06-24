@@ -101,11 +101,6 @@ interface ContentInterface
      * Get updatedAt
      */
     public function getUpdatedAt();
-
-    /**
-     * Get uniqueColumns
-     */
-    public function getUniqueColumns();
 }
 
  

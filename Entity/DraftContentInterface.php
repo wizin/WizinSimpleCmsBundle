@@ -113,10 +113,5 @@ interface DraftContentInterface
      * Get updatedAt
      */
     public function getUpdatedAt();
-
-    /**
-     * Get uniqueColumns
-     */
-    public function getUniqueColumns();
 }
 
