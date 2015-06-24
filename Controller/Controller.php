@@ -24,7 +24,7 @@ class Controller extends BaseController
     protected function sendContent(ContentInterface $content)
     {
         // dispatch InjectVariablesEvent
-        $event = new InjectVariablesEvent();
+        $event = new InjectVariablesEvent($content);
         /** @var \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher $dispatcher */
         $dispatcher = $this->container->get('event_dispatcher');
         $dispatcher->dispatch(Event::ON_INJECT_VARIABLES, $event);
