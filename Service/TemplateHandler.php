@@ -1,19 +1,19 @@
 <?php
 /**
- * TemplateSevice
+ * TemplateHandler
  */
 namespace Wizin\Bundle\SimpleCmsBundle\Service;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use Wizin\Bundle\BaseBundle\Service\Service;
 use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
 
 /**
- * Class Template
+ * Class TemplateHandler
  * @package Wizin\Bundle\SimpleCmsBundle\Service
  */
-class Template
+class TemplateHandler extends Service
 {
     /**
      * regex index for placeholder
@@ -31,21 +31,15 @@ class Template
     const CACHE_DIR_NAME = 'cms';
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-
-    /**
      * @var string path of template directory
      */
     protected $templateDir;
 
     /**
-     * @param ContainerInterface $container
+     *
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
         $this->templateDir = dirname(__DIR__) . '/Resources/templates';
     }
 
@@ -165,9 +159,9 @@ class Template
 
     /**
      * @param Content $content
-     * @return string $responseContent content string for response
+     * @return string
      */
-    public function generateResponseContent(Content $content)
+    public function getTemplateCache(Content $content)
     {
         if ($this->container->get('kernel')->isDebug()) {
             $this->removeCache($content);
@@ -175,20 +169,10 @@ class Template
         $filesystem = new Filesystem();
         $cachePath = $this->getCachePath($content);
         if ($filesystem->exists($cachePath) === false) {
-            $source = $this->getTemplateSource($content->getTemplateFile());
-            $source = $this->replaceSource($source, $content->getParameters());
-            $filesystem->dumpFile($cachePath, $source);
+            $this->generateCache($content, $cachePath);
         }
-        $twig = $this->container->get('twig');
-        $twig->getLoader()->addPath(dirname($cachePath));
-        $responseContent = $twig->render(
-            basename($cachePath),
-            [
-                'title' => $content->getTitle(),
-            ]
-        );
 
-        return $responseContent;
+        return $cachePath;
     }
 
     /**
@@ -285,5 +269,17 @@ class Template
             $suffix = sha1($seed);
         }
         return $this->getCacheDir() . '/' .$content->getId() . '.' .$suffix . '.html.twig';
+    }
+
+    /**
+     * @param Content $content
+     * @param string $cachePath
+     */
+    protected function generateCache(Content $content, $cachePath)
+    {
+        $filesystem = new Filesystem();
+        $source = $this->getTemplateSource($content->getTemplateFile());
+        $source = $this->replaceSource($source, $content->getParameters());
+        $filesystem->dumpFile($cachePath, $source);
     }
 }

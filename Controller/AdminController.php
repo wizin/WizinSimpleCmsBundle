@@ -2,16 +2,13 @@
 
 namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
-use Wizin\Bundle\SimpleCmsBundle\Form\ContentType;
-use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
+use Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface;
+use Wizin\Bundle\SimpleCmsBundle\Exception\DuplicateContentException;
 
 /**
  * Class AdminController
@@ -19,11 +16,6 @@ use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
  */
 class AdminController extends Controller
 {
-    /**
-     * \Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait
-     */
-    use ControllerTrait;
-
     /**
      * @Route("/", name="wizin_simple_cms_admin_index")
      * @Template()
@@ -39,10 +31,10 @@ class AdminController extends Controller
      */
     public function listAction()
     {
-        $contents = $this->getContentRepository()->findAll();
+        $contentsList = $this->getContentManager()->retrieveContentsList();
         $baseUrl = $this->getBaseUrl();
 
-        return ['contents' => $contents, 'baseUrl' => $baseUrl];
+        return ['contentsList' => $contentsList, 'baseUrl' => $baseUrl];
     }
 
     /**
@@ -59,14 +51,16 @@ class AdminController extends Controller
         if ($templateFile === '') {
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
-        $content = new Content();
+        $entityClass = $this->getClassLoader()->getContentRepository()->getClassName();
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
+        $content = new $entityClass();
         $form = $this->createContentForm($content, $templateFile);
         if ($this->getRequest()->isMethod('POST')) {
-            if ($this->saveContent($form, $content)) {
+            if ($this->save($content, $form)) {
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
-        $options = $this->getTemplateService()->getOptions($templateFile);
+        $options = $this->getTemplateHandler()->getOptions($templateFile);
 
         return ['form' => $form->createView(), 'options' => $options];
     }
@@ -80,30 +74,19 @@ class AdminController extends Controller
      */
     public function editAction($id)
     {
-        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\Content $content */
-        $content = $this->getContentRepository()->find($id);
-        if (is_null($content)) {
-            // invalid url
-            throw new NotFoundHttpException();
-        }
-        $form = $this->createContentForm($content, $content->getTemplateFile());
-        if ($this->getRequest()->isMethod('POST')) {
-            if ($this->saveContent($form, $content)) {
-                return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
-            }
-        }
-        $options = $this->getTemplateService()->getOptions($content->getTemplateFile());
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
+        $content = $this->getClassLoader()->getContentRepository()->find($id);
 
-        return ['form' => $form->createView(), 'options' => $options];
+        return $this->edit($content);
     }
 
     /**
      * @Route("/selectTemplateFile", name="wizin_simple_cms_admin_select_template_file")
-     * @Template("WizinSimpleCmsBundle:Admin:select_template_file.html.twig")
+     * @Template()
      */
     public function selectTemplateFileAction()
     {
-        return ['templateFiles' => $this->getTemplateService()->getTemplateFiles()];
+        return ['templateFiles' => $this->getTemplateHandler()->getTemplateFiles()];
     }
 
     /**
@@ -111,30 +94,59 @@ class AdminController extends Controller
      */
     public function previewAction($id)
     {
-        // retrieve Content instance by $id
-        $content = $this->getContentRepository()->find($id);
+        // retrieve content instance by $id
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
+        $content = $this->getClassLoader()->getContentRepository()->find($id);
         if (is_null($content)) {
             // invalid url
             throw new NotFoundHttpException();
         }
-        // create response
-        $response = new Response();
-        $responseContent = $this->getTemplateService()->generateResponseContent($content);
-        $response->setContent($responseContent);
 
-        return $response;
+        return $this->sendContent($content);
     }
 
     /**
-     * @param Content $content
+     * @Route(
+     *   "/draftEdit/{id}",
+     *   name="wizin_simple_cms_admin_draft_edit",
+     * )
+     * @Template()
+     */
+    public function draftEditAction($id)
+    {
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface $draft */
+        $draft = $this->getClassLoader()->getDraftContentRepository()->find($id);
+        $content = $this->getContentConverter()->convertFromDraft($draft);
+
+        return $this->edit($content);
+    }
+
+    /**
+     * @Route("/draftPreview/{id}", name="wizin_simple_cms_admin_draft_preview")
+     */
+    public function draftPreviewAction($id)
+    {
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface $draft */
+        $draft = $this->getClassLoader()->getDraftContentRepository()->find($id);
+        $content = $this->getContentConverter()->convertFromDraft($draft);
+        if (is_null($content)) {
+            // invalid url
+            throw new NotFoundHttpException();
+        }
+
+        return $this->sendContent($content);
+    }
+
+    /**
+     * @param ContentInterface $content
      * @param null $templateFile
      * @return \Symfony\Component\Form\Form
      */
-    protected function createContentForm(Content $content, $templateFile = null)
+    protected function createContentForm(ContentInterface $content, $templateFile = null)
     {
         $hash = [];
         $parameters = (array) $content->getParameters();
-        foreach ($this->getTemplateService()->getPlaceholders($templateFile) as $placeholder) {
+        foreach ($this->getTemplateHandler()->getPlaceholders($templateFile) as $placeholder) {
             if (isset($parameters[$placeholder])) {
                 $hash[$placeholder] = $parameters[$placeholder];
             } else {
@@ -145,30 +157,51 @@ class AdminController extends Controller
         if (is_null($templateFile) === false) {
             $content->setTemplateFile($templateFile);
         }
+        $contentFormType = $this->getClassLoader()->getContentFormType();
 
-        return  $this->createForm(new ContentType(), $content);
+        return  $this->createForm(new $contentFormType(), $content);
     }
 
     /**
+     * @param null|ContentInterface $content
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function edit(ContentInterface $content)
+    {
+        if (is_null($content)) {
+            // invalid url
+            throw new NotFoundHttpException();
+        }
+        $form = $this->createContentForm($content, $content->getTemplateFile());
+        if ($this->getRequest()->isMethod('POST')) {
+            if ($this->save($content, $form)) {
+                return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
+            }
+        }
+        $options = $this->getTemplateHandler()->getOptions($content->getTemplateFile());
+
+        return ['form' => $form->createView(), 'options' => $options];
+    }
+
+    /**
+     * @param ContentInterface $content
      * @param Form $form
-     * @param Content $content
      * @return bool
      */
-    protected function saveContent(Form $form, Content $content)
+    protected function save(ContentInterface $content, Form $form)
     {
         $result = false;
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
-            if ($this->getContentRepository()->isDuplicated($content) === false) {
-                // persist entity
-                $this->getEntityManager()->persist($content);
-                $this->getEntityManager()->flush();
-                // remove old cache
-                $this->getTemplateService()->removeCache($content);
-                $result = true;
-            } else {
+            try {
+                $isDraft = $form->get('draft')->isClicked();
+                if ($this->getContentManager()->save($content, $isDraft) === true) {
+                    $this->getTemplateHandler()->removeCache($content);
+                    $result = true;
+                }
+            } catch (DuplicateContentException $exception) {
                 $form->addError(new FormError(
-                        $this->container->getParameter('wizin_simple_cms.message.error.duplicate')));
+                    $this->container->getParameter('wizin_simple_cms.message.error.duplicate')));
             }
         }
 

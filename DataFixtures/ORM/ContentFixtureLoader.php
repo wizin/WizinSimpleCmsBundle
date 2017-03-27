@@ -12,6 +12,7 @@ class ContentFixtureLoader extends YamlFixtureLoader
     {
         return  array(
             __DIR__ . '/yaml/content.yml',
+            __DIR__ . '/yaml/draft_content.yml',
         );
     }
 }

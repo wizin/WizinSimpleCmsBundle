@@ -3,7 +3,7 @@
 namespace Wizin\Bundle\SimpleCmsBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Wizin\Bundle\SimpleCmsBundle\Entity\Content;
+use Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface;
 
 /**
  * ContentRepository
@@ -15,7 +15,7 @@ class ContentRepository extends EntityRepository
 {
     /**
      * @param string $pathInfo
-     * @return null|\Wizin\Bundle\SimpleCmsBundle\Entity\Content
+     * @return null|\Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface
      */
     public function retrieveEnableContent($pathInfo)
     {
@@ -28,15 +28,15 @@ class ContentRepository extends EntityRepository
     }
 
     /**
-     * @param Content $content
+     * @param ContentInterface $content
      * @return bool
      */
-    public function isDuplicated(Content $content)
+    public function isDuplicated(ContentInterface $content)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('content')
-            ->from('\Wizin\Bundle\SimpleCmsBundle\Entity\Content', 'content')
+            ->from($this->getClassName(), 'content')
             ->where('content.pathInfo = :pathInfo')
             ->setParameter('pathInfo', $content->getPathInfo())
         ;
