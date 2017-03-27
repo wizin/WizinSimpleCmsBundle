@@ -3,8 +3,8 @@
 {% block title %}WizinSimpleCmsBundle:Admin{% endblock %}
 
 {% block main %}
-    <a href="{{ path('wizin_simple_cms_admin_add') }}">Back</a>
+    <a href="{{ path('wizin_simple_cms_admin_index') }}">Back</a>
     <hr/>
-    <h1>Create new content</h1>
+    <h1>Edit draft</h1>
     {{ include("WizinSimpleCmsBundle:Admin:contentForm.html.twig") }}
 {% endblock %}

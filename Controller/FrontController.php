@@ -2,11 +2,8 @@
 
 namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
 
 /**
  * Class FrontController
@@ -14,11 +11,6 @@ use Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait;
  */
 class FrontController extends Controller
 {
-    /**
-     * \Wizin\Bundle\SimpleCmsBundle\Traits\ControllerTrait
-     */
-    use ControllerTrait;
-
     /**
      * @Route(
      *   "/{path}",
@@ -29,19 +21,15 @@ class FrontController extends Controller
      */
     public function showAction($path)
     {
-        $template = $this->getTemplateService();
         $pathInfo = $this->getRequest()->getPathInfo();
-        // retrieve Content instance by $pathInfo
-        $content = $this->getContentRepository()->retrieveEnableContent($pathInfo);
+        // retrieve content instance by $pathInfo
+        /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
+        $content = $this->getClassLoader()->getContentRepository()->retrieveEnableContent($pathInfo);
         if (is_null($content)) {
             // invalid url
             throw new NotFoundHttpException();
         }
-        // create response
-        $response = new Response();
-        $responseContent = $template->generateResponseContent($content);
-        $response->setContent($responseContent);
 
-        return $response;
+        return $this->sendContent($content);
     }
 }
