@@ -1,19 +1,19 @@
 <?php
 namespace Wizin\Bundle\SimpleCmsBundle\Event;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class InjectVariablesListener
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcher
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $dispatcher;
 
     /**
-     * @param EventDispatcher $dispatcher
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function setEventDispatcher(EventDispatcher $dispatcher)
+    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
