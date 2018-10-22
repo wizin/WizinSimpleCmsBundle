@@ -1,29 +1,29 @@
 services:
-    wizin_simple_cms.template_handler:
-        class: "%wizin_simple_cms.service.template_handler.class%"
-        calls:
-            - [setContainer, ["@service_container"]]
-            - [setTemplateDir, ["%wizin_simple_cms.template_dir%"]]
+  wizin_simple_cms.template_handler:
+    class: '%wizin_simple_cms.service.template_handler.class%'
+    calls:
+      - [setContainer, ['@service_container']]
+      - [setTemplateDir, ['%wizin_simple_cms.template_dir%']]
 
-    wizin_simple_cms.class_loader:
-        class: "%wizin_simple_cms.service.class_loader.class%"
-        calls:
-            - [setContainer, ["@service_container"]]
+  wizin_simple_cms.class_loader:
+    class: '%wizin_simple_cms.service.class_loader.class%'
+    calls:
+      - [setContainer, ['@service_container']]
 
-    wizin_simple_cms.content_manager:
-        class: "%wizin_simple_cms.service.content_manager.class%"
-        calls:
-            - [setContainer, ["@service_container"]]
+  wizin_simple_cms.content_manager:
+    class: '%wizin_simple_cms.service.content_manager.class%'
+    calls:
+      - [setContainer, ['@service_container']]
 
-    wizin_simple_cms.content_converter:
-        class: "%wizin_simple_cms.service.content_converter.class%"
-        calls:
-            - [setContainer, ["@service_container"]]
+  wizin_simple_cms.content_converter:
+    class: '%wizin_simple_cms.service.content_converter.class%'
+    calls:
+      - [setContainer, ['@service_container']]
 
-    wizin_simple_cms.event.filter_controller_listener:
-        class: "%wizin_simple_cms.event.filter_controller_listener.class%"
-        calls:
-            - [setEventDispatcher, ["@event_dispatcher"]]
-        tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+  wizin_simple_cms.event.filter_controller_listener:
+    class: '%wizin_simple_cms.event.filter_controller_listener.class%'
+    calls:
+      - [setEventDispatcher, ['@event_dispatcher']]
+    tags:
+      - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
