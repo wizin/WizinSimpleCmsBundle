@@ -1,17 +1,17 @@
 Wizin\Bundle\SimpleCmsBundle\Entity\Content:
-    00000000-0000-0000-0000-000000000001:
-        id: '00000000-0000-0000-0000-000000000001'
-        pathInfo: '/cms/front/page1'
-        title: 'Test Page 1'
-        parameters:
-            body: '<h1>Test Page 1</h1>'
-        templateFile: 'default.html.twig'
-        active: true
-    00000000-0000-0000-0000-000000000002:
-        id: '00000000-0000-0000-0000-000000000002'
-        pathInfo: '/cms/front/page2'
-        title: 'Test Page 2'
-        parameters:
-            body: '<h1>Test Page 2</h1>'
-        templateFile: 'default.html.twig'
-        active: false
+  00000000-0000-0000-0000-000000000001:
+    id: '00000000-0000-0000-0000-000000000001'
+    pathInfo: '/cms/front/page1'
+    title: 'Test Page 1'
+    parameters:
+      body: '<h1>Test Page 1</h1>'
+    templateFile: 'default.html.twig'
+    active: true
+  00000000-0000-0000-0000-000000000002:
+    id: '00000000-0000-0000-0000-000000000002'
+    pathInfo: '/cms/front/page2'
+    title: 'Test Page 2'
+    parameters:
+      body: '<h1>Test Page 2</h1>'
+    templateFile: 'default.html.twig'
+    active: false
