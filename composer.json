@@ -12,7 +12,7 @@
   ],
   "require": {
     "php": ">=5.6.21",
-    "wizin/base-bundle": "0.1.0"
+    "wizin/base-bundle": "dev-sf_2.8"
   },
   "autoload": {
     "psr-0": { "Wizin\\Bundle\\SimpleCmsBundle": "" }
