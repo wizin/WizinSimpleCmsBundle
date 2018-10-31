@@ -11,7 +11,9 @@
     }
   ],
   "require": {
-    "php": ">=5.6.21",
+    "php": ">=5.6.21"
+  },
+  "require-dev": {
     "wizin/base-bundle": "dev-sf_2.8"
   },
   "autoload": {
