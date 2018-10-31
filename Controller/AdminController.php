@@ -159,7 +159,7 @@ class AdminController extends Controller
         }
         $contentFormType = $this->getClassLoader()->getContentFormType();
 
-        return  $this->createForm(new $contentFormType(), $content);
+        return  $this->createForm($contentFormType, $content);
     }
 
     /**
