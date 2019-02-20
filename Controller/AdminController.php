@@ -33,7 +33,7 @@ class AdminController extends Controller
     public function listAction(Request $request)
     {
         $contentsList = $this->getContentManager()->retrieveContentsList();
-        $baseUrl = $this->getBaseUrl();
+        $baseUrl = $this->getBaseUrl($request);
 
         return ['contentsList' => $contentsList, 'baseUrl' => $baseUrl];
     }
@@ -52,7 +52,6 @@ class AdminController extends Controller
         if ($templateFile === '') {
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
-        $request = $this->container->get('request_stack')->getCurrentRequest();
         $entityClass = $this->getClassLoader()->getContentRepository()->getClassName();
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
         $content = new $entityClass();
@@ -195,7 +194,6 @@ class AdminController extends Controller
     protected function save(Request $request, ContentInterface $content, Form $form)
     {
         $result = false;
-        $request = $this->container->get('request_stack')->getCurrentRequest();
         $form->handleRequest($request);
         if ($form->isValid()) {
             try {
@@ -214,12 +212,11 @@ class AdminController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return mixed|string
      */
-    protected function getBaseUrl()
+    protected function getBaseUrl(Request $request)
     {
-        $request = $this->container->get('request_stack')->getCurrentRequest();
-
         $baseUrl = $this->container->getParameter('wizin_simple_cms.base_url');
         if (is_null($baseUrl)) {
             $baseUrl = preg_replace(
