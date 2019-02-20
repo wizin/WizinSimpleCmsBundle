@@ -5,6 +5,7 @@ namespace Wizin\Bundle\SimpleCmsBundle\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface;
@@ -20,7 +21,7 @@ class AdminController extends Controller
      * @Route("/", name="wizin_simple_cms_admin_index")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         return $this->forward('WizinSimpleCmsBundle:Admin:list');
     }
@@ -29,7 +30,7 @@ class AdminController extends Controller
      * @Route("/list", name="wizin_simple_cms_admin_list")
      * @Template()
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $contentsList = $this->getContentManager()->retrieveContentsList();
         $baseUrl = $this->getBaseUrl();
@@ -46,17 +47,18 @@ class AdminController extends Controller
      * )
      * @Template()
      */
-    public function addAction($templateFile)
+    public function addAction(Request $request, $templateFile)
     {
         if ($templateFile === '') {
             return $this->forward('WizinSimpleCmsBundle:Admin:selectTemplateFile');
         }
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $entityClass = $this->getClassLoader()->getContentRepository()->getClassName();
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
         $content = new $entityClass();
         $form = $this->createContentForm($content, $templateFile);
-        if ($this->getRequest()->isMethod('POST')) {
-            if ($this->save($content, $form)) {
+        if ($request->isMethod('POST')) {
+            if ($this->save($request, $content, $form)) {
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
@@ -72,19 +74,19 @@ class AdminController extends Controller
      * )
      * @Template()
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
         $content = $this->getClassLoader()->getContentRepository()->find($id);
 
-        return $this->edit($content);
+        return $this->edit($request, $content);
     }
 
     /**
      * @Route("/selectTemplateFile", name="wizin_simple_cms_admin_select_template_file")
      * @Template()
      */
-    public function selectTemplateFileAction()
+    public function selectTemplateFileAction(Request $request)
     {
         return ['templateFiles' => $this->getTemplateHandler()->getTemplateFiles()];
     }
@@ -92,7 +94,7 @@ class AdminController extends Controller
     /**
      * @Route("/preview/{id}", name="wizin_simple_cms_admin_preview")
      */
-    public function previewAction($id)
+    public function previewAction(Request $request, $id)
     {
         // retrieve content instance by $id
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
@@ -112,19 +114,19 @@ class AdminController extends Controller
      * )
      * @Template()
      */
-    public function draftEditAction($id)
+    public function draftEditAction(Request $request, $id)
     {
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface $draft */
         $draft = $this->getClassLoader()->getDraftContentRepository()->find($id);
         $content = $this->getContentConverter()->convertFromDraft($draft);
 
-        return $this->edit($content);
+        return $this->edit($request, $content);
     }
 
     /**
      * @Route("/draftPreview/{id}", name="wizin_simple_cms_admin_draft_preview")
      */
-    public function draftPreviewAction($id)
+    public function draftPreviewAction(Request $request, $id)
     {
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\DraftContentInterface $draft */
         $draft = $this->getClassLoader()->getDraftContentRepository()->find($id);
@@ -163,18 +165,19 @@ class AdminController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param null|ContentInterface $content
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function edit(ContentInterface $content)
+    public function edit(Request $request, ContentInterface $content)
     {
         if (is_null($content)) {
             // invalid url
             throw new NotFoundHttpException();
         }
         $form = $this->createContentForm($content, $content->getTemplateFile());
-        if ($this->getRequest()->isMethod('POST')) {
-            if ($this->save($content, $form)) {
+        if ($request->isMethod('POST')) {
+            if ($this->save($request, $content, $form)) {
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
         }
@@ -184,14 +187,16 @@ class AdminController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param ContentInterface $content
      * @param Form $form
      * @return bool
      */
-    protected function save(ContentInterface $content, Form $form)
+    protected function save(Request $request, ContentInterface $content, Form $form)
     {
         $result = false;
-        $form->handleRequest($this->getRequest());
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $form->handleRequest($request);
         if ($form->isValid()) {
             try {
                 $isDraft = $form->get('draft')->isClicked();
@@ -213,12 +218,14 @@ class AdminController extends Controller
      */
     protected function getBaseUrl()
     {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+
         $baseUrl = $this->container->getParameter('wizin_simple_cms.base_url');
         if (is_null($baseUrl)) {
             $baseUrl = preg_replace(
-                '@' .preg_quote($this->getRequest()->getBaseUrl()) .'@',
+                '@' .preg_quote($request->getBaseUrl()) .'@',
                 '',
-                $this->getRequest()->getUriForPath('/')
+                $request->getUriForPath('/')
             );
         }
         if (substr($baseUrl, -1) === '/') {
