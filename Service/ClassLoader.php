@@ -30,17 +30,9 @@ class ClassLoader extends Service
     }
 
     /**
-     * @return \Wizin\Bundle\SimpleCmsBundle\Form\ContentType
-     */
-    public function getContentFormType()
-    {
-        return new ContentType();
-    }
-
-    /**
      * @return string
      */
-    public function getContentFormTypeFQCN()
+    public function getContentFormType()
     {
         return ContentType::class;
     }
