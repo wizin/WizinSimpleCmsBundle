@@ -158,7 +158,7 @@ class AdminController extends Controller
         if (is_null($templateFile) === false) {
             $content->setTemplateFile($templateFile);
         }
-        $contentFormType = $this->getClassLoader()->getContentFormType();
+        $contentFormType = $this->getClassLoader()->getContentFormTypeFQCN();
 
         return  $this->createForm($contentFormType, $content);
     }

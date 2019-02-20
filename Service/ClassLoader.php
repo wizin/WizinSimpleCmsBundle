@@ -36,4 +36,12 @@ class ClassLoader extends Service
     {
         return new ContentType();
     }
+
+    /**
+     * @return string
+     */
+    public function getContentFormTypeFQCN()
+    {
+        return ContentType::class;
+    }
 }
