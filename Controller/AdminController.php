@@ -133,6 +133,8 @@ class AdminController extends Controller
             // invalid url
             throw new NotFoundHttpException();
         }
+        // refresh content entity to prevent unintended updates
+        $this->getEntityManager()->refresh($content);
 
         return $this->sendContent($content);
     }
@@ -159,7 +161,7 @@ class AdminController extends Controller
         }
         $contentFormType = $this->getClassLoader()->getContentFormType();
 
-        return  $this->createForm(new $contentFormType(), $content);
+        return  $this->createForm($contentFormType, $content);
     }
 
     /**
@@ -177,6 +179,9 @@ class AdminController extends Controller
             if ($this->save($content, $form)) {
                 return $this->redirect($this->generateUrl('wizin_simple_cms_admin_index'));
             }
+        } else {
+            // refresh content entity to prevent unintended updates
+            $this->getEntityManager()->refresh($content);
         }
         $options = $this->getTemplateHandler()->getOptions($content->getTemplateFile());
 
