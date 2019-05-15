@@ -24,7 +24,7 @@ class FrontController extends Controller
         $pathInfo = $this->getRequest()->getPathInfo();
         // retrieve content instance by $pathInfo
         /** @var \Wizin\Bundle\SimpleCmsBundle\Entity\ContentInterface $content */
-        $content = $this->getClassLoader()->getContentRepository()->retrieveEnableContent($pathInfo);
+        $content = $this->getContentManager()->retrieveEnableContent($pathInfo);
         if (is_null($content)) {
             // invalid url
             throw new NotFoundHttpException();
