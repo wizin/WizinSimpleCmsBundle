@@ -19,8 +19,8 @@ class ContentType extends AbstractType
         $builder->add('id', Type\HiddenType::class);
         $builder->add('pathInfo', Type\TextType::class);
         $builder->add('title', Type\TextType::class);
-        $builder->add('parameters', Type\CollectionType::class, ['type' => 'textarea', 'required' => false]);
-        $builder->add('templateFile', Type\TextType::class, ['read_only' => true]);
+        $builder->add('parameters', Type\CollectionType::class, ['entry_type' => Type\TextareaType::class, 'required' => false]);
+        $builder->add('templateFile', Type\TextType::class, ['attr' => ['readonly' => true]]);
         $builder->add('active', Type\CheckboxType::class, ['required' => false]);
         $builder->add('save', Type\SubmitType::class, ['validation_groups' => false]);
         $builder->add('draft', Type\SubmitType::class, ['validation_groups' => false]);
