@@ -26,11 +26,4 @@ class ContentType extends AbstractType
         $builder->add('draft', Type\SubmitType::class, ['validation_groups' => false]);
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'Content';
-    }
 }
